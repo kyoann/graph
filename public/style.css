@@ -1,0 +1,89 @@
+body {
+	height: 100%;
+	background-color:#EEEEFF;
+}
+
+.column {
+	float:left;
+	display: inline-block;
+}
+.node {
+	border:1px solid black;
+	border-radius:5px;
+	background-color: #DDDDEE;
+	display: inline;
+	padding: 5px;
+}
+.selectedNode {
+	border:1px solid black;
+	border-radius:5px;
+	background-color: white;
+	display: inline;
+	padding: 5px;
+}
+.nodeWrapper {
+	margin-top: 15px;
+	margin-right: 5px;
+}
+.UI {
+	float:left;
+	border:5px solid #CCCCFF;
+	border-radius:5px;
+	margin: 5px;
+	padding: 5px;
+	/*
+	  font-family:"Tahoma","Geneva",sans-serif;
+	  */
+	font-family:"Comic Sans MS","cursive",sans-serif;
+	color: #777777;
+	min-width:30px;
+	min-height:30px;
+}
+.UILabel {
+	font-family:"Tahoma","Geneva",sans-serif;
+	color: #CCCCCC;
+	text-align:right;
+	font-size:small;
+}
+#colsView {
+}
+#buffer {
+}
+#newNodeDiv {
+}
+#nodeEditor {
+}
+#todoDiv {
+}
+#nodeEditorData {
+	/*background-color: #ddddFF;
+	font-family:"Tahoma","Geneva",sans-serif;
+	border: none ;
+	*/
+	font-family:"Comic Sans MS","cursive",sans-serif;
+	background-color: #F9f9FF;
+	border:2px solid #CCCCFF;
+	border-radius:5px;
+	padding: 5px;
+	height: 300px;
+	width:300px;
+	margin-top:10px;
+}
+#nodeEditorLabel {
+	font-family:"Comic Sans MS","cursive",sans-serif;
+	background-color: #F9f9FF;
+	border:2px solid #CCCCFF;
+	border-radius:5px;
+	padding: 5px;
+}
+#newLink {
+	background-color: #F9f9FF;
+	border:2px solid #CCCCFF;
+	border-radius:5px;
+}
+
+#connexionDivId {
+	  font-family:"Tahoma","Geneva",sans-serif;
+	color: #777777;
+	text-align:right;
+}
