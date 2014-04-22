@@ -28,8 +28,8 @@ function eraseColumnsAfter(columnView) {
 
 function highLightNodeDiv(nodeDiv) {
 	var colNumber = parseInt(nodeDiv.dataset.containerid.substr(3));
-	var columnDiv = document.querySelector('#col'+colNumber);
-	var currentNodeDiv = columnDiv.firstChild;
+	var containerView = document.querySelector('#' + nodeDiv.dataset.containerid);
+	var currentNodeDiv = containerView.firstChild;
 	while(currentNodeDiv) {
 		var realNodeDiv = currentNodeDiv.firstChild;
 		if(realNodeDiv == nodeDiv) {
@@ -217,7 +217,8 @@ function dropNodeOnBuffer(container,ev) {
 	}
 	ev.preventDefault();
 	getNode(draggedNodeId,function(node) {
-		addNodes(container, [node], null);
+		var nodesViews = addNodes(container, [node], null);
+		nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0]);}; 
 	});
 }
 function dropNodeOnFavorites(container,ev) {
@@ -251,7 +252,8 @@ function updateFavorites() {
 		favoritesContentDiv.innerHTML = '';
 
 		getNeighbours('Favorites',function(favoritesNodes){
-			addNodes(favoritesContentDiv,favoritesNodes.nodes,null);
+			var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null);
+			nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0]);}; 
 		});
 }
 function dropNodeOnBody(ev) {
