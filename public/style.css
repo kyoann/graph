@@ -5,7 +5,6 @@ body {
 
 .column {
 	float:left;
-	display: inline-block;
 }
 .node {
 	border:1px solid black;
