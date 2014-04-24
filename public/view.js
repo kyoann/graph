@@ -11,6 +11,7 @@ function selected(nodeDiv) {
 		eraseColumnsAfter(nextColumnDiv);
 	});
 }
+
 function selectedWithoutErase(nodeDiv) {
 	getNeighbours(nodeDiv.dataset.nodeid,function(neighbours){
 		highLightNodeDiv(nodeDiv);
@@ -24,6 +25,10 @@ function eraseColumnsAfter(columnView) {
 	while(columnView.nextSibling) {
 		getColumnsView().removeChild(columnView.nextSibling);
 	}
+}
+function initColumns(nodeModel) {
+	$('#col0').innerHTML = ''; 
+	addNode($('#col0'),nodeModel,null);
 }
 
 function highLightNodeDiv(nodeDiv) {
@@ -71,18 +76,19 @@ function initColumn(columnDiv) {
 	columnDiv.innerHTML = '';
 
 }
-function addNodes(container, nodesModels,parentNodeView) {
+function addNodes(container, nodesModels,parentNodeView,uiId) {
 	var nodesViews = [];
 	for(var i = 0, length = nodesModels.length ; i < length ; i++) {
-		nodesViews.push(addNode(container, nodesModels[i],parentNodeView));
+		nodesViews.push(addNode(container, nodesModels[i],parentNodeView,uiId));
 	}
 	return nodesViews;
 }
-function addNode(container, node,parentNodeView) {
+function addNode(container, node,parentNodeView,uiId) {
 	var nodeDiv = document.createElement("div");
 	nodeDiv.className = 'node';
 	nodeDiv.id = container.id + 'Node' + node.id;
 	nodeDiv.dataset.containerid = container.id;
+	nodeDiv.dataset.uiId = uiId;
 	if(parentNodeView != undefined) {
 		nodeDiv.dataset.parentNodeViewId = parentNodeView.id;
 	}
@@ -252,13 +258,29 @@ function updateFavorites() {
 		favoritesContentDiv.innerHTML = '';
 
 		getNeighbours('Favorites',function(favoritesNodes){
-			var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null);
-			nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0]);}; 
+			var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null,'favorites');
+			for(var i = 0 ; i < nodesViews.length ; i++) {
+				nodesViews[i].onclick =
+			function() {
+				showInNodeEditor(nodesViews[i]);
+				initColumns(favoritesNodes.nodes[i]);
+			}; 
+			}
 		});
 }
 function dropNodeOnBody(ev) {
 	alert("Node dropped on Body");
+	var draggedNodeViewId = ev.dataTransfer.getData('Text');
+	var draggedNodeView = document.querySelector('#'+draggedNodeViewId);
+	var draggedNodeId = draggedNodeView.dataset.nodeid;
+	var uiId = draggedNodeView.dataset.uiId;
+	if(uiId === 'favorites') {
+		unlinkNode('Favorites',draggedNodeId,function() {
+			updateFavorites();
+		});
+	}
 }
+
 function dropNodeOnColsView(ev) {
 	var draggedNodeViewId = ev.dataTransfer.getData('Text');
 	var draggedNodeView = document.querySelector('#'+draggedNodeViewId);

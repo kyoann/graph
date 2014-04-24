@@ -66,7 +66,8 @@ body {
 	border-radius:5px;
 	padding: 5px;
 	height: 300px;
-	width:300px;
+	/*width:300px;*/
+	width:90%;
 	margin-top:10px;
 }
 #nodeEditorLabel {
