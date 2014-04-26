@@ -15,6 +15,9 @@ app.configure('development', function(){
 //var graphRepo = 'H:\\graph\\graphRepository';
 var graphRepo = '/Users/Johan/work/webProjects/graph/graphRepository';
 
+var indexData = fs.readFileSync(graphRepo + '/dataIndex.json',["utf8"]);
+var index = JSON.parse(indexData);
+
 io.sockets.on('connection', function (socket) {
 	console.log('connection');
 	socket.emit('connected', { status: 'ok' });
@@ -143,15 +146,31 @@ io.sockets.on('connection', function (socket) {
 			});
 		});
 	});
-	//socket.on('addNodeToFavorites', function (request,done) {
-	//	var nodeId = request.nodeId;
-	//	deserializeNode(graphRepo,'Favorites',function(err,node) {
-	//		node.neighboursIds.push(nodeId);	
-	//		serializeNode(graphRepo,node,function(err) {
-	//		});
-	//	});
-	//}
+	socket.on('dataSearch', function(aRequest,done) {
+		if(!aRequest.request) {
+			done([]);
+		}
+		var words = splitInWords(aRequest.request);
+		var results = index[words[0]];
+		if(!results) {
+			results = [];
+		}
+		deserializeNodes(graphRepo,results,0,[],function(err,nodes) {
+			if(err) {
+				console.log(err);
+				return;
+			}
+
+			done(nodes);
+		});
+	});
 });
+
+var splitRegExp = /\w+/g;
+function splitInWords(data) {
+	var words = data.match(splitRegExp);
+	return words;
+}
 
 function deserializeNodes(graphRepo,nodesIds,i,nodes,done) {
 	if(nodesIds == undefined || i >= nodesIds.length) {

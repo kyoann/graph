@@ -414,7 +414,6 @@ function getSelectedNodeView(columnView) {
 	var selectedNodeView = columnView.querySelector('.selectedNode');
 	return selectedNodeView;
 }
-
 function createNodeView() {
 	console.log("create view");
 	var label = document.querySelector('#newNodeInputText').value;	
@@ -422,3 +421,18 @@ function createNodeView() {
 		addNode(document.querySelector('#newNodeDiv'),node);
 	});	
 }
+function searchResults() {
+	var request = $('#searchRequest').value;
+	search(request,function(nodes) {
+		var resultsDiv = $('#searchResults');
+		resultsDiv.innerHTML = '';
+		var ul = document.createElement('ul');
+		resultsDiv.appendChild(ul);
+		for(var i = 0 ; i < nodes.length ; i++) {
+			var li = document.createElement('li');
+			ul.appendChild(li);
+			li.innerHTML = nodes[i].label;
+		}
+	});
+}
+

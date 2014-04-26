@@ -45,5 +45,12 @@
 				new node label :<input type='text' id='newNodeInputText'/>
 				<button class='button' onclick='createNodeView()' style='display:inline'>Create</button>
 			</div>
+			<div id='search' class='UI' ondragover='' ondrop=''>
+				<div class='UILabel'> Search </div>
+				<div class='UIContent' data-containerid='search'></div>
+				<input id="searchRequest" type='text'></input>
+				<button onclick='searchResults()'>Search</button>
+				<div id='searchResults'></div>
+			</div>
 		</body>
 	</html>
