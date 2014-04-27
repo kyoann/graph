@@ -149,9 +149,10 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 	socket.on('dataSearch', function(aRequest,done) {
-		debugger;
+		console.log('dataSearch');
 		if(!aRequest.request) {
 			done([]);
+			return;
 		}
 		var words = splitInWords(aRequest.request);
 		var dataResults = dataIndex[words[0].toLowerCase()];
@@ -159,7 +160,11 @@ io.sockets.on('connection', function (socket) {
 			dataResults = [];
 		}
 		var labelsResults = labelsIndex[words[0].toLowerCase()];
-		results = dataResults.concat(labelsResults);
+		if(!labelsResults) {
+			labelsResults = [];
+		}
+		debugger;
+		var results = dataResults.concat(labelsResults);
 		deserializeNodes(graphRepo,results,0,[],function(err,nodes) {
 			if(err) {
 				console.log(err);

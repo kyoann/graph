@@ -438,4 +438,16 @@ function searchResults() {
 		}
 	});
 }
-
+var lastModificationTime = new Date(); 
+function searchRequestModified() {
+	lastModificationTime = new Date();
+	setTimeout(createSearchTimeoutCB(lastModificationTime),500);
+}
+function createSearchTimeoutCB(requestTime) {
+	return function() {
+		if(requestTime != lastModificationTime) {
+			return;
+		}
+		searchResults();
+	};
+}

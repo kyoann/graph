@@ -38,8 +38,13 @@
 			<div id='search' class='UI' ondragover='' ondrop=''>
 				<div class='UILabel'> Search </div>
 				<div class='UIContent' data-containerid='search'></div>
-				<input id="searchRequest" type='text'></input>
-				<button onclick='searchResults()'>Search</button>
+				<input id="searchRequest" type='text' onkeydown='searchRequestModified()'></input>
+				<!--<script type='text/javascript'>
+					$('#searchRequest').addEventListener('input',searchRequestModified());
+				</script>
+				-->
+				<!--<button onclick='searchResults()'>Search</button>
+				-->
 				<div id='searchResults'></div>
 			</div>
 			<div id='nodeEditor'  class='UI' style='display:none'>
