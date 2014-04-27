@@ -16,7 +16,9 @@ app.configure('development', function(){
 var graphRepo = '/Users/Johan/work/webProjects/graph/graphRepository';
 
 var indexData = fs.readFileSync(graphRepo + '/dataIndex.json',["utf8"]);
-var index = JSON.parse(indexData);
+var dataIndex = JSON.parse(indexData);
+var labelsIndexData = fs.readFileSync(graphRepo + '/labelsIndex.json',["utf8"]);
+var labelsIndex = JSON.parse(labelsIndexData);
 
 io.sockets.on('connection', function (socket) {
 	console.log('connection');
@@ -147,14 +149,17 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 	socket.on('dataSearch', function(aRequest,done) {
+		debugger;
 		if(!aRequest.request) {
 			done([]);
 		}
 		var words = splitInWords(aRequest.request);
-		var results = index[words[0]];
-		if(!results) {
-			results = [];
+		var dataResults = dataIndex[words[0].toLowerCase()];
+		if(!dataResults) {
+			dataResults = [];
 		}
+		var labelsResults = labelsIndex[words[0].toLowerCase()];
+		results = dataResults.concat(labelsResults);
 		deserializeNodes(graphRepo,results,0,[],function(err,nodes) {
 			if(err) {
 				console.log(err);

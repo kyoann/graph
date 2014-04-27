@@ -96,8 +96,8 @@ function addNode(container, node, parentNodeView, uiId) {
 	if(parentNodeView != undefined) {
 		nodeDiv.dataset.parentNodeViewId = parentNodeView.id;
 	}
-	nodeDiv.onclick = function() { selected(this); showInNodeEditor(nodeDiv);};			
-	//nodeDiv.ondblclick= function() { showInNodeEditor(nodeDiv);};			
+	nodeDiv.onclick = function() { selected(this); showInNodeEditor(nodeDiv.dataset.nodeid);};			
+	//nodeDiv.ondblclick= function() { showInNodeEditor(nodeDiv.dataset.nodeid);};			
 	nodeDiv.dataset.nodeid = node.id;
 	nodeDiv.draggable = true;
 	nodeDiv.addEventListener('dragstart',function() {drag(event);},false);
@@ -116,8 +116,8 @@ function getNodeEditor() {
 }
 
 var nodeInNodeEditor;
-function showInNodeEditor(nodeView) {
-	var nodeId = nodeView.dataset.nodeid;
+function showInNodeEditor(nodeId) {
+	//var nodeId = nodeView.dataset.nodeid;
 	getNode(nodeId,function(node) {
 		getNodeData(nodeId,function(data) {
 			getNodeFiles(nodeId,function(err,updatedFiles) {	
@@ -228,7 +228,7 @@ function dropNodeOnBuffer(container,ev) {
 	ev.preventDefault();
 	getNode(draggedNodeId,function(node) {
 		var nodesViews = addNodes(container, [node], null,"buffer");
-		nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0]);initColumns(node);}; 
+		nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0].dataset.nodeid);initColumns(node);}; 
 	});
 }
 function dropNodeOnFavorites(container,ev) {
@@ -265,13 +265,13 @@ function updateFavorites() {
 			var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null,'favorites');
 			for(var i = 0 ; i < nodesViews.length ; i++) {
 				//var nodeView = nodesViews[i];
-				nodesViews[i].onclick = createOnClickCBForFavorites(nodesViews[i],favoritesNodes.nodes[i]);
+				nodesViews[i].onclick = createOnClickCB1(favoritesNodes.nodes[i]);
 			}
 		});
 }
-function createOnClickCBForFavorites(nodeView,nodeModel) {
+function createOnClickCB1(nodeModel) {
 			return function() {
-				showInNodeEditor(nodeView);
+				showInNodeEditor(nodeModel.id);
 				initColumns(nodeModel);
 			}; 
 }
@@ -430,8 +430,11 @@ function searchResults() {
 		resultsDiv.appendChild(ul);
 		for(var i = 0 ; i < nodes.length ; i++) {
 			var li = document.createElement('li');
+			var a = document.createElement('a');
 			ul.appendChild(li);
-			li.innerHTML = nodes[i].label;
+			li.appendChild(a);
+			a.onclick = createOnClickCB1(nodes[i]); 
+			a.textContent = nodes[i].label;
 		}
 	});
 }

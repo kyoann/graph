@@ -23,16 +23,6 @@
 		<script type='text/javascript'>
 			addNode($('#col0'),{id:0,label:"Root"},null);
 			</script>
-			<div id='nodeEditor'  class='UI' style='display:none'>
-				<div class='UILabel'> Node editor </div>
-				<input id='nodeEditorLabel' type='text' id='nodeEditorLabel'></input>
-				<br>
-				<textarea id='nodeEditorData'></textarea>
-				<br><button onclick='saveNodeDataView()'>Save</button>
-				<ul id="filesLinksUL"> </ul>
-				<input id="newLink" type='text'></input>
-				<button onclick='addLinkView()'>Add link</button>
-			</div>
 			<div id='buffer' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnBuffer(this,event)'>
 				<div class='UILabel'> Buffer </div>
 			</div>
@@ -51,6 +41,16 @@
 				<input id="searchRequest" type='text'></input>
 				<button onclick='searchResults()'>Search</button>
 				<div id='searchResults'></div>
+			</div>
+			<div id='nodeEditor'  class='UI' style='display:none'>
+				<div class='UILabel'> Node editor </div>
+				<input id='nodeEditorLabel' type='text' id='nodeEditorLabel'></input>
+				<br>
+				<textarea id='nodeEditorData'></textarea>
+				<br><button onclick='saveNodeDataView()'>Save</button>
+				<ul id="filesLinksUL"> </ul>
+				<input id="newLink" type='text'></input>
+				<button onclick='addLinkView()'>Add link</button>
 			</div>
 		</body>
 	</html>
