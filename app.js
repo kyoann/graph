@@ -12,8 +12,8 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-//var graphRepo = 'H:\\graph\\graphRepository';
-var graphRepo = '/Users/Johan/work/webProjects/graph/graphRepository';
+var graphRepo = 'H:\\graph\\graphRepository';
+//var graphRepo = '/Users/Johan/work/webProjects/graph/graphRepository';
 
 io.sockets.on('connection', function (socket) {
 	console.log('connection');
@@ -99,18 +99,20 @@ io.sockets.on('connection', function (socket) {
 		deserializeNode(graphRepo,nodeId1,function(err,node) {
 			debugger;
 			if(err) {
-				if(err.code === 'ENOENT' && nodeId1 === 'Favorites') {
-					var path = graphRepo+'/Favorites.json';
-					fs.open(path,'wx', function(err,fd) {
-						if(err) { console.log(err);return; };
-						fs.close(fd,function(err) {
+				if(err.code === 'ENOENT') {
+					if(nodeId1 === 'favorites' || nodeId1 === 'context') {
+						var path = graphRepo+'/' + nodeId1 + '.json';
+						fs.open(path,'wx', function(err,fd) {
 							if(err) { console.log(err);return; };
-							serializeNode(graphRepo,{id:'Favorites',neighboursIds:[nodeId2]},function(err) {
+							fs.close(fd,function(err) {
 								if(err) { console.log(err);return; };
-								done({id:'Favorites',neighbours:[nodeId2]});
+								serializeNode(graphRepo,{id:nodeId1,neighboursIds:[nodeId2]},function(err) {
+									if(err) { console.log(err);return; };
+									done({id:nodeId1,neighbours:[nodeId2]});
+								});
 							});
 						});
-					});
+					}
 				}
 				else {
 					throw(err);	

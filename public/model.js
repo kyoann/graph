@@ -1,7 +1,9 @@
 var socket = io.connect('http://localhost:3000');
 socket.on('connected',function(data) {
+	//TODO
 	document.querySelector("#connexionDivId").innerHTML='connected';
-	updateFavorites();
+	updateUI($('#favorites'));
+	updateUI($('#context'));
 });
 function getNeighbours(nodeId,done) {
 	socket.emit('getNeighbours',{nodeId:nodeId},done);
@@ -31,5 +33,5 @@ function linkFilesWithNode(nodeId,filesNames, done) {
 	socket.emit('linkFilesWithNode',{nodeId:nodeId,filesNames:filesNames},done);
 }
 function addNodeToFavorites(nodeId,done) {
-	socket.emit('linkNodes',{nodeId1:'Favorites',nodeId2:nodeId},done);
+	socket.emit('linkNodes',{nodeId1:'favorites',nodeId2:nodeId},done);
 }

@@ -36,9 +36,13 @@
 			<div id='buffer' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnBuffer(this,event)'>
 				<div class='UILabel'> Buffer </div>
 			</div>
-			<div id='favorites' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnFavorites(this,event)'>
+			<div id='favorites' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
 				<div class='UILabel'> Favorites </div>
 				<div class='UIContent' data-containerid='favorites'></div>
+			</div>
+			<div id='context' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
+				<div class='UILabel'> Context </div>
+				<div class='UIContent' data-containerid='context'></div>
 			</div>
 			<div id='newNodeDiv' class='UI'>
 				<div class='UILabel'> Create </div>
