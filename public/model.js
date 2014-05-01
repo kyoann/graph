@@ -35,3 +35,6 @@ function linkFilesWithNode(nodeId,filesNames, done) {
 function addNodeToFavorites(nodeId,done) {
 	socket.emit('linkNodes',{nodeId1:'favorites',nodeId2:nodeId},done);
 }
+function search(request,done) {
+	socket.emit('dataSearch',{request:request},done);
+}

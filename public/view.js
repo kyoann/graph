@@ -96,8 +96,8 @@ function addNode(container, node, parentNodeView, uiId) {
 	if(parentNodeView != undefined) {
 		nodeDiv.dataset.parentNodeViewId = parentNodeView.id;
 	}
-	nodeDiv.onclick = function() { selected(this); showInNodeEditor(nodeDiv);};			
-	//nodeDiv.ondblclick= function() { showInNodeEditor(nodeDiv);};			
+	nodeDiv.onclick = function() { selected(this); showInNodeEditor(nodeDiv.dataset.nodeid);};			
+	//nodeDiv.ondblclick= function() { showInNodeEditor(nodeDiv.dataset.nodeid);};			
 	nodeDiv.dataset.nodeid = node.id;
 	nodeDiv.draggable = true;
 	nodeDiv.addEventListener('dragstart',function() {drag(event);},false);
@@ -116,8 +116,8 @@ function getNodeEditor() {
 }
 
 var nodeInNodeEditor;
-function showInNodeEditor(nodeView) {
-	var nodeId = nodeView.dataset.nodeid;
+function showInNodeEditor(nodeId) {
+	//var nodeId = nodeView.dataset.nodeid;
 	getNode(nodeId,function(node) {
 		getNodeData(nodeId,function(data) {
 			getNodeFiles(nodeId,function(err,updatedFiles) {	
@@ -232,7 +232,7 @@ function dropNodeOnBuffer(container,ev) {
 	ev.preventDefault();
 	getNode(draggedNodeId,function(node) {
 		var nodesViews = addNodes(container, [node], null,"buffer");
-		nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0]);initColumns(node);}; 
+		nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0].dataset.nodeid);initColumns(node);}; 
 	});
 }
 function dropNodeOnUI(container,ev) {
@@ -266,21 +266,44 @@ function dropNodeOnUI(container,ev) {
 	//	nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0]);}; 
 	//});
 }
+//<<<<<<< HEAD
 function updateUI(container) {
 	var UIContentDiv = container.querySelector('.UIContent');
 	UIContentDiv.innerHTML = '';
 	getNeighbours(container.id,function(nodesModels){
 		var nodesViews = addNodes(UIContentDiv,nodesModels.nodes,null,'favorites');
 		for(var i = 0 ; i < nodesViews.length ; i++) {
-			nodesViews[i].onclick = createOnClickCB(nodesViews[i],nodesModels.nodes[i]);
+			nodesViews[i].onclick = createOnClickCB1(nodesModels.nodes[i]);
 		}
 	});
 }
-function createOnClickCB(nodeView,nodeModel) {
+function createOnClickCB1(nodeModel) {
 	return function() {
-		showInNodeEditor(nodeView);
+		showInNodeEditor(nodeModel.id);
 		initColumns(nodeModel);
 	}; 
+	/*
+=======
+function updateFavorites() {
+		var favoritesDiv = $('#favorites');
+		var favoritesContentDiv = favoritesDiv.querySelector('.UIContent');
+		favoritesContentDiv.innerHTML = '';
+
+		getNeighbours('Favorites',function(favoritesNodes){
+			var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null,'favorites');
+			for(var i = 0 ; i < nodesViews.length ; i++) {
+				//var nodeView = nodesViews[i];
+				nodesViews[i].onclick = createOnClickCB1(favoritesNodes.nodes[i]);
+			}
+		});
+}
+function createOnClickCB1(nodeModel) {
+			return function() {
+				showInNodeEditor(nodeModel.id);
+				initColumns(nodeModel);
+			}; 
+>>>>>>> SearchTools
+*/
 }
 function dropNodeOnBody(ev) {
 	var draggedNodeViewId = ev.dataTransfer.getData('Text');
@@ -420,11 +443,40 @@ function getSelectedNodeView(columnView) {
 	var selectedNodeView = columnView.querySelector('.selectedNode');
 	return selectedNodeView;
 }
-
 function createNodeView() {
 	console.log("create view");
 	var label = document.querySelector('#newNodeInputText').value;	
 	createNode(label,function(node) {
 		addNode(document.querySelector('#newNodeDiv'),node);
 	});	
+}
+function searchResults() {
+	var request = $('#searchRequest').value;
+	search(request,function(nodes) {
+		var resultsDiv = $('#searchResults');
+		resultsDiv.innerHTML = '';
+		var ul = document.createElement('ul');
+		resultsDiv.appendChild(ul);
+		for(var i = 0 ; i < nodes.length ; i++) {
+			var li = document.createElement('li');
+			var a = document.createElement('a');
+			ul.appendChild(li);
+			li.appendChild(a);
+			a.onclick = createOnClickCB1(nodes[i]); 
+			a.textContent = nodes[i].label;
+		}
+	});
+}
+var lastModificationTime = new Date(); 
+function searchRequestModified() {
+	lastModificationTime = new Date();
+	setTimeout(createSearchTimeoutCB(lastModificationTime),500);
+}
+function createSearchTimeoutCB(requestTime) {
+	return function() {
+		if(requestTime != lastModificationTime) {
+			return;
+		}
+		searchResults();
+	};
 }
