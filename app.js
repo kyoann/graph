@@ -12,8 +12,8 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-var graphRepo = 'H:\\graph\\graphRepository';
-//var graphRepo = '/Users/Johan/work/webProjects/graph/graphRepository';
+//var graphRepo = 'H:\\graph\\graphRepository';
+var graphRepo = '/Users/Johan/work/webProjects/graph/graphRepository';
 
 io.sockets.on('connection', function (socket) {
 	console.log('connection');
