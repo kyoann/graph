@@ -33,6 +33,18 @@
 			<div id='context' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
 				<div class='UILabel'> Context </div>
 				<div class='UIContent' data-containerid='context'></div>
+				<div id="contextSelectionDiv">
+					<select>
+						<option>Context 1</option>
+						<option>Context 2</option>
+					</select>
+					<button onclick="switchContextDiv()">Create</button>
+				</div>
+				<div id="contextCreationDiv" style='display:none'>
+					<input type='text'></input>
+					<button onclick="createContext()">Create</button>
+					<button onclick="switchContextDiv()">Cancel</button>
+				</div>
 			</div>
 			<div id='newNodeDiv' class='UI'>
 				<div class='UILabel'> Create </div>
@@ -61,5 +73,5 @@
 				<input id="newLink" type='text'></input>
 				<button onclick='addLinkView()'>Add link</button>
 			</div>
-		</body>
-	</html>
+			</body>
+			</html>

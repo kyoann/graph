@@ -480,3 +480,18 @@ function createSearchTimeoutCB(requestTime) {
 		searchResults();
 	};
 }
+
+function switchContextDiv() {
+	if($('#contextCreationDiv').style.display === 'none') {
+		$('#contextSelectionDiv').style.display = 'none';
+		$('#contextCreationDiv').style.display = 'block';
+	}
+	else {
+		if($('#contextSelectionDiv').style.display === 'none') {
+			$('#contextCreationDiv').style.display = 'none';
+			$('#contextSelectionDiv').style.display = 'block';
+		}
+	}
+}
+function createContext() {
+}
