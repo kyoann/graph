@@ -26,6 +26,9 @@ function getNodeData(nodeId,done) {
 function getNodeFiles(nodeId,done) {
 	socket.emit('getNodeFiles',{nodeId:nodeId},done);
 }
+function saveNodeLabel(nodeId,label,done) {
+	socket.emit('saveNodeLabel',{nodeId:nodeId,label:label},done);
+}
 function saveNodeData(nodeId,data,done) {
 	socket.emit('saveNodeData',{nodeId:nodeId,data:data},done);
 }

@@ -116,12 +116,16 @@ function getNodeEditor() {
 }
 
 var nodeInNodeEditor;
+var nodeInNodeEditorLabel0;
+var nodeInNodeEditorData0;
 function showInNodeEditor(nodeId) {
 	//var nodeId = nodeView.dataset.nodeid;
 	getNode(nodeId,function(node) {
 		getNodeData(nodeId,function(data) {
 			getNodeFiles(nodeId,function(err,updatedFiles) {	
 				nodeInNodeEditor = node;
+				nodeInNodeEditorLabel0 = node.label;
+				nodeInNodeEditorData0 = data;
 				var nodeEditorLabelView = document.querySelector('#nodeEditorLabel');
 				var nodeEditorDataView = document.querySelector('#nodeEditorData');
 				nodeEditorLabelView.value = node.label;
@@ -132,9 +136,17 @@ function showInNodeEditor(nodeId) {
 		});
 	});
 }
-function saveNodeDataView() {
-	saveNodeData(nodeInNodeEditor.id,$('#nodeEditorData').value,function(err) {
-	});
+function saveNodeView() {
+	var nodeInNodeEditorLabel1 = document.querySelector('#nodeEditorLabel').value;
+	var nodeInNodeEditorData1 = document.querySelector('#nodeEditorData').value;
+	if(nodeInNodeEditorLabel0 != nodeInNodeEditorLabel1) {
+		saveNodeLabel(nodeInNodeEditor.id,nodeInNodeEditorLabel1,function(err) { });
+	}
+	if(nodeInNodeEditorData0 != nodeInNodeEditorData1) {
+		saveNodeData(nodeInNodeEditor.id,nodeInNodeEditorData1,function(err) { });
+	}
+	nodeInNodeEditorLabel0 = nodeInNodeEditorLabel1;
+	nodeInNodeEditorData0 = nodeInNodeEditorData1;
 }
 function addLinkView() {
 	var filesNames = [];
@@ -187,32 +199,32 @@ function allowdropColsView(ev) {
 }
 function allowdrop(ev) {
 	if(ev.target.id === 'buffer')
-	{
-		ev.preventDefault();
-	}
-	if(ev.target.id === 'favorites')
-	{
-		ev.preventDefault();
-	}
-	if(ev.target.parentNode.id == 'colsView')
-	{
-		ev.preventDefault();
-	}
-	if(ev.target.parentNode.id === 'buffer')
-	{
-		ev.preventDefault();
-	}
-	if(ev.target.parentNode.id === 'context')
-	{
-		ev.preventDefault();
-	}
-	if(ev.target.dataset.nodeid !== undefined) {
-		ev.dataTransfer.dropEffect = 'link';
-		ev.preventDefault();
-	}
-	if(ev.target == document.body) {
-		ev.preventDefault();
-	}
+		{
+			ev.preventDefault();
+		}
+		if(ev.target.id === 'favorites')
+			{
+				ev.preventDefault();
+			}
+			if(ev.target.parentNode.id == 'colsView')
+				{
+					ev.preventDefault();
+				}
+				if(ev.target.parentNode.id === 'buffer')
+					{
+						ev.preventDefault();
+					}
+					if(ev.target.parentNode.id === 'context')
+						{
+							ev.preventDefault();
+						}
+						if(ev.target.dataset.nodeid !== undefined) {
+							ev.dataTransfer.dropEffect = 'link';
+							ev.preventDefault();
+						}
+						if(ev.target == document.body) {
+							ev.preventDefault();
+						}
 }
 function dropNodeOnBuffer(container,ev) {
 	ev.stopPropagation();
@@ -283,25 +295,25 @@ function createOnClickCB1(nodeModel) {
 		initColumns(nodeModel);
 	}; 
 	/*
-=======
-function updateFavorites() {
-		var favoritesDiv = $('#favorites');
-		var favoritesContentDiv = favoritesDiv.querySelector('.UIContent');
-		favoritesContentDiv.innerHTML = '';
+	   =======
+	   function updateFavorites() {
+	   var favoritesDiv = $('#favorites');
+	   var favoritesContentDiv = favoritesDiv.querySelector('.UIContent');
+	   favoritesContentDiv.innerHTML = '';
 
-		getNeighbours('Favorites',function(favoritesNodes){
-			var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null,'favorites');
-			for(var i = 0 ; i < nodesViews.length ; i++) {
-				//var nodeView = nodesViews[i];
-				nodesViews[i].onclick = createOnClickCB1(favoritesNodes.nodes[i]);
-			}
-		});
+	   getNeighbours('Favorites',function(favoritesNodes){
+	   var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null,'favorites');
+	   for(var i = 0 ; i < nodesViews.length ; i++) {
+//var nodeView = nodesViews[i];
+nodesViews[i].onclick = createOnClickCB1(favoritesNodes.nodes[i]);
+}
+});
 }
 function createOnClickCB1(nodeModel) {
-			return function() {
-				showInNodeEditor(nodeModel.id);
-				initColumns(nodeModel);
-			}; 
+return function() {
+showInNodeEditor(nodeModel.id);
+initColumns(nodeModel);
+}; 
 >>>>>>> SearchTools
 */
 }
