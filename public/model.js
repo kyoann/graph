@@ -8,8 +8,8 @@ socket.on('connected',function(data) {
 function getNeighbours(nodeId,done) {
 	socket.emit('getNeighbours',{nodeId:nodeId},done);
 }
-function createNode(nodeLabel,done) {
-	socket.emit('createNode',nodeLabel,done);
+function createNode(nodeLabel,context,done) {
+	socket.emit('createNode',{label:nodeLabel,context:context},done);
 }
 function linkNodes(nodeId1,nodeId2,done) {
 	socket.emit('linkNodes',{nodeId1:nodeId1,nodeId2:nodeId2},done);

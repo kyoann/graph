@@ -24,16 +24,18 @@ io.sockets.on('connection', function (socket) {
 	console.log('connection');
 	socket.emit('connected', { status: 'ok' });
 
-	socket.on('createNode', function (label,done) {
-		console.log("create server:"+label);
+	socket.on('createNode', function (request,done) {
 		var lastAttributedId = parseInt(fs.readFileSync(graphRepo+'/lastAttributedId.txt',{encoding:'utf8'}));
 		lastAttributedId++;	
 		fs.writeFileSync(graphRepo+'/lastAttributedId.txt',lastAttributedId);
-		var node = { id : lastAttributedId, label: label, neighboursIds: [] };
+		var node = { id : lastAttributedId, label: request.label, neighboursIds: [] };
 		serializeNode(graphRepo,node,function(err) {
 			if(err) throw err;
 			done(node);
 		});
+		for(var i = 0 ; i < request.context.length ; i++) {
+			linkNodes({nodeId1:request.context[i],nodeId2:lastAttributedId},function(node){});
+		}
 	});
 
 	socket.on('getNode', function (request,done) {
@@ -97,12 +99,12 @@ io.sockets.on('connection', function (socket) {
 			}
 		});
 	});
-	socket.on('linkNodes', function (request,done) {
+	socket.on('linkNodes',function(request,done){linkNodes(request,done);} );
+	function linkNodes(request,done) {
 		var nodeId1 = request.nodeId1;
 		var nodeId2 = request.nodeId2;
 
 		deserializeNode(graphRepo,nodeId1,function(err,node) {
-			debugger;
 			if(err) {
 				if(err.code === 'ENOENT') {
 					if(nodeId1 === 'favorites' || nodeId1 === 'context') {
@@ -130,7 +132,7 @@ io.sockets.on('connection', function (socket) {
 				done(node);
 			});
 		});
-	});
+	}
 	socket.on('unlinkNode', function (request,done) {
 		var parentNodeId = request.parentNodeId;
 		var nodeId = request.nodeId;

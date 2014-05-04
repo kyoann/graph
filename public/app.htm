@@ -21,45 +21,45 @@
 			</div>
 		</div>
 		<script type='text/javascript'>
-			addNode($('#col0'),{id:0,label:"Root"},null);
-			</script>
-			<div id='buffer' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnBuffer(this,event)'>
-				<div class='UILabel'> Buffer </div>
-			</div>
-			<div id='favorites' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
-				<div class='UILabel'> Favorites </div>
-				<div class='UIContent' data-containerid='favorites'></div>
-			</div>
-			<div id='context' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
-				<div class='UILabel'> Context </div>
-				<div class='UIContent' data-containerid='context'></div>
-			</div>
-			<div id='newNodeDiv' class='UI'>
-				<div class='UILabel'> Create </div>
-				new node label :<input type='text' id='newNodeInputText'/>
-				<button class='button' onclick='createNodeView()' style='display:inline'>Create</button>
-			</div>
-			<div id='search' class='UI' ondragover='' ondrop=''>
-				<div class='UILabel'> Search </div>
-				<div class='UIContent' data-containerid='search'></div>
-				<input id="searchRequest" type='text' onkeydown='searchRequestModified()'></input>
-				<!--<script type='text/javascript'>
+addNode($('#col0'),{id:0,label:"Root"},null);
+		</script>
+		<div id='buffer' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnBuffer(this,event)'>
+			<div class='UILabel'> Buffer </div>
+		</div>
+		<div id='favorites' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
+			<div class='UILabel'> Favorites </div>
+			<div class='UIContent' data-containerid='favorites'></div>
+		</div>
+		<div id='context' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
+			<div class='UILabel'> Context </div>
+			<div class='UIContent' data-containerid='context'></div>
+		</div>
+		<div id='newNodeDiv' class='UI'>
+			<div class='UILabel'> Create </div>
+			new node label :<input type='text' id='newNodeInputText'/>
+			<button class='button' onclick='createNodeView()' style='display:inline'>Create</button>
+		</div>
+		<div id='search' class='UI' ondragover='' ondrop=''>
+			<div class='UILabel'> Search </div>
+			<div class='UIContent' data-containerid='search'></div>
+			<input id="searchRequest" type='text' onkeydown='searchRequestModified()'></input>
+			<!--<script type='text/javascript'>
 					$('#searchRequest').addEventListener('input',searchRequestModified());
 				</script>
 				-->
-				<!--<button onclick='searchResults()'>Search</button>
+			<!--<button onclick='searchResults()'>Search</button>
 				-->
-				<div id='searchResults'></div>
-			</div>
-			<div id='nodeEditor'  class='UI' style='display:none'>
-				<div class='UILabel'> Node editor </div>
-				<input id='nodeEditorLabel' type='text' id='nodeEditorLabel'></input>
-				<br>
-				<textarea id='nodeEditorData'></textarea>
-				<br><button onclick='saveNodeDataView()'>Save</button>
-				<ul id="filesLinksUL"> </ul>
-				<input id="newLink" type='text'></input>
-				<button onclick='addLinkView()'>Add link</button>
-			</div>
+			<div id='searchResults'></div>
+		</div>
+		<div id='nodeEditor'  class='UI' style='display:none'>
+			<div class='UILabel'> Node editor </div>
+			<input id='nodeEditorLabel' type='text' id='nodeEditorLabel'></input>
+			<br>
+			<textarea id='nodeEditorData'></textarea>
+			<br><button onclick='saveNodeDataView()'>Save</button>
+			<ul id="filesLinksUL"> </ul>
+			<input id="newLink" type='text'></input>
+			<button onclick='addLinkView()'>Add link</button>
+		</div>
 		</body>
-	</html>
+		</html>

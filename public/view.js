@@ -194,6 +194,10 @@ function allowdrop(ev) {
 	{
 		ev.preventDefault();
 	}
+	if(ev.target.id === 'context')
+	{
+		ev.preventDefault();
+	}
 	if(ev.target.parentNode.id == 'colsView')
 	{
 		ev.preventDefault();
@@ -257,8 +261,9 @@ function dropNodeOnUI(container,ev) {
 		});
 	}
 	if(container.id === 'context') {
-		addNodeToContext(draggedNodeId,function(contextNodes){
-			updateUI(container);
+		getNode(draggedNodeId,function(node) {
+			var nodesViews = addNodes(container, [node], null,"buffer");
+			nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0].dataset.nodeid);initColumns(node);}; 
 		});
 	}
 	//getNode(draggedNodeId,function(node) {
@@ -283,25 +288,25 @@ function createOnClickCB1(nodeModel) {
 		initColumns(nodeModel);
 	}; 
 	/*
-=======
-function updateFavorites() {
-		var favoritesDiv = $('#favorites');
-		var favoritesContentDiv = favoritesDiv.querySelector('.UIContent');
-		favoritesContentDiv.innerHTML = '';
+	   =======
+	   function updateFavorites() {
+	   var favoritesDiv = $('#favorites');
+	   var favoritesContentDiv = favoritesDiv.querySelector('.UIContent');
+	   favoritesContentDiv.innerHTML = '';
 
-		getNeighbours('Favorites',function(favoritesNodes){
-			var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null,'favorites');
-			for(var i = 0 ; i < nodesViews.length ; i++) {
-				//var nodeView = nodesViews[i];
-				nodesViews[i].onclick = createOnClickCB1(favoritesNodes.nodes[i]);
-			}
-		});
+	   getNeighbours('Favorites',function(favoritesNodes){
+	   var nodesViews = addNodes(favoritesContentDiv,favoritesNodes.nodes,null,'favorites');
+	   for(var i = 0 ; i < nodesViews.length ; i++) {
+//var nodeView = nodesViews[i];
+nodesViews[i].onclick = createOnClickCB1(favoritesNodes.nodes[i]);
+}
+});
 }
 function createOnClickCB1(nodeModel) {
-			return function() {
-				showInNodeEditor(nodeModel.id);
-				initColumns(nodeModel);
-			}; 
+return function() {
+showInNodeEditor(nodeModel.id);
+initColumns(nodeModel);
+}; 
 >>>>>>> SearchTools
 */
 }
@@ -446,7 +451,7 @@ function getSelectedNodeView(columnView) {
 function createNodeView() {
 	console.log("create view");
 	var label = document.querySelector('#newNodeInputText').value;	
-	createNode(label,function(node) {
+	createNode(label,getContext(),function(node) {
 		addNode(document.querySelector('#newNodeDiv'),node);
 	});	
 }
@@ -479,4 +484,13 @@ function createSearchTimeoutCB(requestTime) {
 		}
 		searchResults();
 	};
+}
+function getContext() {
+	var contextNodes = $('#context').querySelectorAll('.node');
+	var ids = [];
+
+	for(var i = 0 ; i < contextNodes.length ; i++) {
+		ids.push(contextNodes[i].dataset.nodeid);	
+	}
+	return ids;
 }
