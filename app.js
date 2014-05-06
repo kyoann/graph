@@ -99,6 +99,39 @@ io.sockets.on('connection', function (socket) {
 			}
 		});
 	});
+	socket.on('getContextResultSet', function (context,done) {
+		if(!context || context.length == 0) {
+			done("empty context",null);
+		}
+		deserializeNodes(graphRepo,context,0,[],function(err,nodes) {
+			debugger;
+			if(nodes.length == 0) {
+				done("no node",null);
+				return;
+			}
+			var results = nodes[0].neighboursIds;
+			for(var i = 1 ; i < nodes.length ; i++) {
+				var newResults = [];
+				var currentNode = nodes[i];
+				for(var j = 0 ; j < currentNode.neighboursIds.length ; j++) {
+					for(var k = 0 ; k < results.length ; k++) {
+						if(results[k] == currentNode.neighboursIds[j]) {
+							newResults.push(results[k]);	
+							break;
+						}
+					}	
+				}
+				results = newResults;
+			}
+			deserializeNodes(graphRepo,results,0,[],function(err,contextResultSet) {
+				if(err) {
+					done(err,null);
+					return;
+				}
+				done(null,contextResultSet);
+			});
+		});
+	});
 	socket.on('linkNodes',function(request,done){linkNodes(request,done);} );
 	function linkNodes(request,done) {
 		var nodeId1 = request.nodeId1;

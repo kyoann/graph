@@ -38,3 +38,6 @@ function addNodeToFavorites(nodeId,done) {
 function search(request,done) {
 	socket.emit('dataSearch',{request:request},done);
 }
+function getContextResultSet(context, done) {
+	socket.emit('getContextResultSet',context,done);
+}

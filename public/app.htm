@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!--<link rel='stylesheet' href="/style.css" type='text/css'>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="/model.js"></script>
-		<script src="/view.js"></script>-->
 		<link rel='stylesheet' href="style.css" type='text/css'>
 		<script src="../node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js"></script>
 		<script src="model.js"></script>
@@ -12,11 +8,11 @@
 	</head>
 	<body ondragover='allowdrop(event)' ondrop='dropNodeOnBody(event)'>
 		<div id='connexionDivId'></div>
+		<div id='errorDiv'></div>
 		<div id='colsView'  class='UI' ondragover='allowdropColsView(event)' ondrop='dropNodeOnColsView(event)'>
 			<div class='UILabel'> Columns </div>
 			<div class='UIContent'>
 				<div class='column' id='col0'>
-					<!--	<div class='nodeWrapper'><div class='node' id='node0' data-containerid='col0' data-nodeid='0' onclick='selected(this)' draggable='true' ondragstart='drag(event)' ondragover='allowdrop(event)' ondrop='dropNodeOnNode(event)'>Root</div></div> -->
 				</div>
 			</div>
 		</div>
@@ -28,11 +24,15 @@ addNode($('#col0'),{id:0,label:"Root"},null);
 		</div>
 		<div id='favorites' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
 			<div class='UILabel'> Favorites </div>
-			<div class='UIContent' data-containerid='favorites'></div>
+			<div id='favoritesNodeContainer' class='UIContent' data-containerid='favorites'></div>
 		</div>
 		<div id='context' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
 			<div class='UILabel'> Context </div>
-			<div class='UIContent' data-containerid='context'></div>
+			<!-- TODO -->
+			<div id='contextDefinition' class='ContextDefinition'></div>	
+			<div id='contextResultSet' class='ContextResultSet'></div>	
+			<div class='UIContent' data-containerid='context'>
+			</div>
 		</div>
 		<div id='newNodeDiv' class='UI'>
 			<div class='UILabel'> Create </div>
@@ -43,12 +43,6 @@ addNode($('#col0'),{id:0,label:"Root"},null);
 			<div class='UILabel'> Search </div>
 			<div class='UIContent' data-containerid='search'></div>
 			<input id="searchRequest" type='text' onkeydown='searchRequestModified()'></input>
-			<!--<script type='text/javascript'>
-					$('#searchRequest').addEventListener('input',searchRequestModified());
-				</script>
-				-->
-			<!--<button onclick='searchResults()'>Search</button>
-				-->
 			<div id='searchResults'></div>
 		</div>
 		<div id='nodeEditor'  class='UI' style='display:none'>
