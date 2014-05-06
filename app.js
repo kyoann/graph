@@ -61,6 +61,21 @@ io.sockets.on('connection', function (socket) {
 			done(err,{nodeId:nodeId,filesNames:filesNames});
 		});
 	});
+	socket.on('saveNodeLabel', function(request,done) {
+		var nodeId = request.nodeId;
+		var label = request.label;
+		deserializeNode(graphRepo,nodeId,function(err,node) {
+			if(err) throw err;
+			node.label = label;
+			debugger;
+			serializeNode(graphRepo,node,function(err) {
+				//if(err) throw err;
+				if(err) console.log(err);
+				debugger;
+				done(err);
+			});
+		});
+	});
 	socket.on('saveNodeData', function(request,done) {
 		console.log('saveNodeData:'+request.nodeId);
 		var nodeId = request.nodeId;

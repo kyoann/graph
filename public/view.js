@@ -116,12 +116,16 @@ function getNodeEditor() {
 }
 
 var nodeInNodeEditor;
+var nodeInNodeEditorLabel0;
+var nodeInNodeEditorData0;
 function showInNodeEditor(nodeId) {
 	//var nodeId = nodeView.dataset.nodeid;
 	getNode(nodeId,function(node) {
 		getNodeData(nodeId,function(data) {
 			getNodeFiles(nodeId,function(err,updatedFiles) {	
 				nodeInNodeEditor = node;
+				nodeInNodeEditorLabel0 = node.label;
+				nodeInNodeEditorData0 = data;
 				var nodeEditorLabelView = document.querySelector('#nodeEditorLabel');
 				var nodeEditorDataView = document.querySelector('#nodeEditorData');
 				nodeEditorLabelView.value = node.label;
@@ -132,9 +136,17 @@ function showInNodeEditor(nodeId) {
 		});
 	});
 }
-function saveNodeDataView() {
-	saveNodeData(nodeInNodeEditor.id,$('#nodeEditorData').value,function(err) {
-	});
+function saveNodeView() {
+	var nodeInNodeEditorLabel1 = document.querySelector('#nodeEditorLabel').value;
+	var nodeInNodeEditorData1 = document.querySelector('#nodeEditorData').value;
+	if(nodeInNodeEditorLabel0 != nodeInNodeEditorLabel1) {
+		saveNodeLabel(nodeInNodeEditor.id,nodeInNodeEditorLabel1,function(err) { });
+	}
+	if(nodeInNodeEditorData0 != nodeInNodeEditorData1) {
+		saveNodeData(nodeInNodeEditor.id,nodeInNodeEditorData1,function(err) { });
+	}
+	nodeInNodeEditorLabel0 = nodeInNodeEditorLabel1;
+	nodeInNodeEditorData0 = nodeInNodeEditorData1;
 }
 function addLinkView() {
 	var filesNames = [];
