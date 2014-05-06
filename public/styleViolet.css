@@ -1,13 +1,15 @@
 body {
 	height: 100%;
-	background-color:rgb(236,236,236);
+	background-color:#EEEEFF;
 }
 
 .column {
 	float:left;
 }
 .node {
-	background-color: rgb(246,246,246);
+	border:1px solid black;
+	border-radius:5px;
+	background-color: #DDDDEE;
 	display: inline;
 	padding: 5px;
 }
@@ -24,15 +26,14 @@ body {
 }
 .UI {
 	display: inline-block;
-	border-top:5px solid rgb(163,163,163);
+	border:5px solid #CCCCFF;
 	border-radius:5px;
 	margin: 5px;
 	padding: 5px;
-	  font-family:"Tahoma","Geneva",sans-serif;
-	font-size:small;
 	/*
-	font-family:"Comic Sans MS","cursive",sans-serif;
+	  font-family:"Tahoma","Geneva",sans-serif;
 	  */
+	font-family:"Comic Sans MS","cursive",sans-serif;
 	color: #777777;
 	min-width:30px;
 	min-height:30px;
@@ -58,10 +59,10 @@ body {
 	font-family:"Tahoma","Geneva",sans-serif;
 	border: none ;
 	*/
-	font-family:"Tahoma","Geneva",sans-serif;
-	color: #777777;
-	background-color: rgb(246,246,246);
-	border:2px solid rgb(163,163,163);
+	font-family:"Comic Sans MS","cursive",sans-serif;
+	background-color: #F9f9FF;
+	border:2px solid #CCCCFF;
+	border-radius:5px;
 	padding: 5px;
 	height: 300px;
 	/*width:300px;*/
@@ -69,15 +70,15 @@ body {
 	margin-top:10px;
 }
 #nodeEditorLabel {
-	font-family:"Tahoma","Geneva",sans-serif;
-	color: #777777;
-	background-color: rgb(246,246,246);
-	border:2px solid rgb(163,163,163);
+	font-family:"Comic Sans MS","cursive",sans-serif;
+	background-color: #F9f9FF;
+	border:2px solid #CCCCFF;
+	border-radius:5px;
 	padding: 5px;
 }
 #newLink {
-	background-color: rgb(246,246,246);
-	border:2px solid rgb(163,163,163);
+	background-color: #F9f9FF;
+	border:2px solid #CCCCFF;
 	border-radius:5px;
 }
 
