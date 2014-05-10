@@ -31,8 +31,11 @@ addNode($('#col0'),{id:0,label:"Root"},null);
 	<!-- TODO -->
 	<div id='contextDefinition' class='ContextDefinition'></div>	
 	<div id='contextResultSet' class='ContextResultSet'></div>	
-	<div class='UIContent' data-containerid='context'>
-	</div>
+	<div class='UIContent' data-containerid='context'> </div>
+</div>
+<div id='contexts' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
+	<div class='UILabel'> Contexts </div>
+	<div id='contextsNodeContainer' class='UIContent' data-containerid='contexts'></div>
 </div>
 <div id='newNodeDiv' class='UI'>
 	<div class='UILabel'> Create </div>

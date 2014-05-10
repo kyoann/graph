@@ -210,6 +210,10 @@ function allowdrop(ev) {
 	{
 		ev.preventDefault();
 	}
+	if(ev.target.id === 'contexts')
+	{
+		ev.preventDefault();
+	}
 	if(ev.target.parentNode.id == 'colsView')
 	{
 		ev.preventDefault();
@@ -269,17 +273,37 @@ function dropNodeOnUI(container,ev) {
 	ev.preventDefault();
 	if(container.id === 'favorites') {
 		addNodeToFavorites(draggedNodeId,function(favoritesNode){
-			updateUI(container);
+			updateUI(container,createOnClickCB1);
 		});
 	}
 	if(container.id === 'context') {
 		getNode(draggedNodeId,function(node) {
 			var contextDefinition = container.querySelector('.ContextDefinition');
 			var nodesViews = addNodes(contextDefinition, [node], null,"context");
-			updateContextResultSet();
+			contextUpdatedEvent();
 			nodesViews[0].onclick = function() {showInNodeEditor(nodesViews[0].dataset.nodeid);initColumns(node);}; 
 		});
 	}
+	if(container.id === 'contexts') {
+		//HERE
+		addNodeToContexts(draggedNodeId,function(contextsNodes){
+			updateUI(container,createOnClickCBContexts);
+		});
+	}
+}
+function contextUpdatedEvent() {
+	updateContextResultSet();
+	updateContexts();
+}
+function updateContexts() {
+	//var currentContextNodeView = getCurrentContextNodeView();
+	var currentContextNodeView = $('#contexts').querySelector('.selectedNode');
+	if(!currentContextNodeView) {
+		return;
+	}
+	setNodeNeighboursIds({nodeId:currentContextNodeView.dataset.nodeid,neighboursIds:getContext()},function(err,contextNode){
+		if(err) { setError(err); return; }
+	});
 }
 function updateContextResultSet() {
 	var context = getContext();
@@ -306,17 +330,53 @@ function updateContextResultSet() {
 function setError(err) {
 	$('#errorDiv').textContent = err;
 }
-function updateUI(container) {
+function updateUI(container,onClickCBFactory) {
 	var UIContentDiv = container.querySelector('.UIContent');
 	UIContentDiv.innerHTML = '';
 	getNeighbours(container.id,function(nodesModels){
 		var nodesViews = addNodes(UIContentDiv,nodesModels.nodes,null,container.id);
 		for(var i = 0 ; i < nodesViews.length ; i++) {
-			nodesViews[i].onclick = createOnClickCB1(nodesModels.nodes[i]);
+			nodesViews[i].onclick = onClickCBFactory(nodesModels.nodes[i],nodesViews[i]);
 		}
 	});
 }
-function createOnClickCB1(nodeModel) {
+function createOnClickCBContexts(nodeModel,nodeView) {
+	return function() {
+		selectedNamedContextChanged(nodeModel,nodeView);
+	}
+}
+function selectedNamedContextChanged(nodeModel,nodeView) {
+	getNeighbours(nodeModel.id,function(nodesInContext){
+		//Contexts
+		var formerSelectedNode = $('#contexts').querySelector('.selectedNode');
+		if(formerSelectedNode) {
+			formerSelectedNode.className = 'node';
+		}
+		nodeView.className = 'selectedNode';
+		//Context
+		var contextDefinitionDiv = $('#context').querySelector('.ContextDefinition');
+		contextDefinitionDiv.innerHTML = '';	
+		$('#context').querySelector('.ContextResultSet').innerHTML = '';	
+		addNodes(contextDefinitionDiv,nodesInContext.nodes,null,'context');
+		updateContextResultSet();
+		//Favorites
+		//TODO
+		var favorites = getFavorites();
+		for(var i = 0 ; i < favorites.length ; i++) {
+			if(isInContext(favorites[i].dataset.nodeid)) {
+			}
+		}
+	});
+}
+function isInContext(nodeId) {
+//TODO
+	return true;
+}
+function getFavorites() {
+	var favoritesUI = $('#favorites'); 
+	return favoritesUI.querySelectorAll('.node').push(favoritesUI.querySelector('.selectedNode'));
+}
+function createOnClickCB1(nodeModel,nodesView) {
 	return function() {
 		showInNodeEditor(nodeModel.id);
 		initColumns(nodeModel);
@@ -329,7 +389,7 @@ function dropNodeOnBody(ev) {
 	var uiId = draggedNodeView.dataset.uiId;
 	if(uiId === 'favorites') {
 		unlinkNode('favorites',draggedNodeId,function() {
-			updateUI($('#favorites'));
+			updateUI($('#favorites'),createOnClickCB1);
 		});
 	}
 	if(uiId === 'buffer') {
@@ -337,7 +397,12 @@ function dropNodeOnBody(ev) {
 	}
 	if(uiId === 'context') {
 		$('#context').querySelector('.ContextDefinition').removeChild(draggedNodeView.parentNode);
-		updateContextResultSet();
+		contextUpdatedEvent();
+	}
+	if(uiId === 'contexts') {
+		unlinkNode('contexts',draggedNodeId,function() {
+			updateUI($('#contexts'),createOnClickCB1);
+		});
 	}
 }
 

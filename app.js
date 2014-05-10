@@ -155,7 +155,7 @@ io.sockets.on('connection', function (socket) {
 		deserializeNode(graphRepo,nodeId1,function(err,node) {
 			if(err) {
 				if(err.code === 'ENOENT') {
-					if(nodeId1 === 'favorites' || nodeId1 === 'context') {
+					if(nodeId1 === 'favorites' || nodeId1 === 'contexts') {
 						var path = graphRepo+'/' + nodeId1 + '.json';
 						fs.open(path,'wx', function(err,fd) {
 							if(err) { console.log(err);return; };
@@ -200,8 +200,18 @@ io.sockets.on('connection', function (socket) {
 			});
 		});
 	});
+	socket.on('setNodeNeighboursIds',function(request,done) {
+		var nodeId = request.nodeId;
+		deserializeNode(graphRepo,nodeId,function(err,node) {
+			if(err) { done(err,null); return; }
+			node.neighboursIds = request.neighboursIds;
+			serializeNode(graphRepo,node,function(err) {
+				if(err) { done(err,null); return; }
+				done(null,node);
+			});
+		});
+	});
 	socket.on('dataSearch', function(aRequest,done) {
-		console.log('dataSearch');
 		if(!aRequest.request) {
 			done([]);
 			return;

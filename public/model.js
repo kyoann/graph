@@ -2,8 +2,8 @@ var socket = io.connect('http://localhost:3000');
 socket.on('connected',function(data) {
 	//TODO
 	document.querySelector("#connexionDivId").innerHTML='connected';
-	updateUI($('#favorites'));
-	updateUI($('#context'));
+	updateUI($('#favorites'),createOnClickCB1);
+	updateUI($('#contexts'),createOnClickCBContexts);
 });
 function getNeighbours(nodeId,done) {
 	socket.emit('getNeighbours',{nodeId:nodeId},done);
@@ -16,6 +16,9 @@ function linkNodes(nodeId1,nodeId2,done) {
 }
 function unlinkNode(parentNodeId, nodeId, done) {
 	socket.emit('unlinkNode',{parentNodeId:parentNodeId,nodeId:nodeId},done);
+}
+function setNodeNeighboursIds(request,done) {
+	socket.emit('setNodeNeighboursIds',request,done);
 }
 function getNode(nodeId,done) {
 	socket.emit('getNode',{nodeId:nodeId},done);
@@ -37,6 +40,9 @@ function linkFilesWithNode(nodeId,filesNames, done) {
 }
 function addNodeToFavorites(nodeId,done) {
 	socket.emit('linkNodes',{nodeId1:'favorites',nodeId2:nodeId},done);
+}
+function addNodeToContexts(nodeId,done) {
+	socket.emit('linkNodes',{nodeId1:'contexts',nodeId2:nodeId},done);
 }
 function search(request,done) {
 	socket.emit('dataSearch',{request:request},done);
