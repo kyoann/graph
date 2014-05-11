@@ -361,7 +361,7 @@ function selectedNamedContextChanged(nodeModel,nodeView) {
 		updateContextResultSet();
 		//Favorites
 		//TODO
-		var favorites = getFavorites();
+		var favorites = getFavoritesViews();
 		for(var i = 0 ; i < favorites.length ; i++) {
 			if(isInContext(favorites[i].dataset.nodeid)) {
 			}
@@ -369,12 +369,13 @@ function selectedNamedContextChanged(nodeModel,nodeView) {
 	});
 }
 function isInContext(nodeId) {
-//TODO
+	//TODO
 	return true;
 }
-function getFavorites() {
+function getFavoritesViews() {
 	var favoritesUI = $('#favorites'); 
-	return favoritesUI.querySelectorAll('.node').push(favoritesUI.querySelector('.selectedNode'));
+	var favoritesNodesViews = favoritesUI.querySelectorAll('.node');
+	return favoritesNodesViews;
 }
 function createOnClickCB1(nodeModel,nodesView) {
 	return function() {
@@ -481,7 +482,7 @@ function updateViewAfterNodeUnlinked(parentNodeId, nodeId) {
 		if(selectedNode != undefined && selectedNode.dataset.nodeid == parentNodeId) {
 			if(i + 1 < colsList.length) {
 				var selectedNodeView2 = getSelectedNodeView(colsList.item(i + 1));
-				var seletedNodeId2;
+				var selectedNodeId2;
 				if(selectedNodeView2) {
 					selectedNodeId2 = selectedNodeView2.dataset.nodeid;	
 				}
@@ -510,10 +511,10 @@ function updateViewAfterNodeLinked(updatedNode) {
 		//alert("treating " + colsList.item(i).id);
 		var selectedNode = getSelectedNodeView(colsList.item(i));
 
-		if(selectedNode.dataset.nodeid == updatedNode.id) {
+		if(selectedNode && selectedNode.dataset.nodeid == updatedNode.id) {
 			if(i + 1 < colsList.length) {
 				var selectedNodeView2 = getSelectedNodeView(colsList.item(i + 1));
-				var seletedNodeId2;
+				var selectedNodeId2;
 				if(selectedNodeView2) {
 					selectedNodeId2 = selectedNodeView2.dataset.nodeid;	
 				}
