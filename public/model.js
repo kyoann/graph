@@ -1,10 +1,3 @@
-var socket = io.connect('http://localhost:3000');
-socket.on('connected',function(data) {
-	//TODO
-	document.querySelector("#connexionDivId").innerHTML='connected';
-	updateUI($('#favorites'),createOnClickCB1);
-	updateUI($('#contexts'),createOnClickCBContexts);
-});
 function getNeighbours(nodeId,done) {
 	socket.emit('getNeighbours',{nodeId:nodeId},done);
 }

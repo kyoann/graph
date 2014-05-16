@@ -1,3 +1,11 @@
+var socket = io.connect('http://localhost:3000');
+socket.on('connected',function(data) {
+	//TODO
+	document.querySelector("#connexionDivId").innerHTML='connected';
+	updateUI($('#favorites'),createOnClickCB1);
+	updateUI($('#contexts'),createOnClickCBContexts);
+});
+
 var $ = function(s) { return document.querySelector(s);}
 //var $ = document.querySelector;
 
@@ -7,7 +15,7 @@ function selected(nodeDiv) {
 		highLightNodeDiv(nodeDiv);
 		var nextColumnDiv = getNextColumnDiv(nodeDiv);
 		initColumn(nextColumnDiv);
-		addNodes(nextColumnDiv, neighbours.nodes,nodeDiv);
+		var nodesViews = addNodes(nextColumnDiv, neighbours.nodes,nodeDiv);
 		eraseColumnsAfter(nextColumnDiv);
 	});
 }

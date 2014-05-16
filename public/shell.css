@@ -1,0 +1,10 @@
+.shell {
+	margin-top: 15px;
+}
+.shellPrompt {
+}
+.shellInput:focus {
+	outline: none;
+}
+[contenteditable]:focus { outline: 0px solid transparent; }
+
