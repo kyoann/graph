@@ -1,3 +1,7 @@
+#shellContainer {
+/*	font-family:"Tahoma","Geneva",sans-serif;
+ */
+}
 .shell {
 	margin-top: 15px;
 }
@@ -8,3 +12,12 @@
 }
 [contenteditable]:focus { outline: 0px solid transparent; }
 
+.nodeEditorLabel {
+	background-color: rgb(246,246,246);
+	text-align: center;
+	margin-top:5px;
+}
+.nodeEditorData {
+	background-color: rgb(246,246,246);
+	margin-top:5px;
+}

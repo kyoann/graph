@@ -9,16 +9,11 @@
 <body ondragover='allowdrop(event)' ondrop='dropNodeOnBody(event)'>
 <div id='connexionDivId'></div>
 <div id='errorDiv'></div>
-<div id='colsView'  class='UI' ondragover='allowdropColsView(event)' ondrop='dropNodeOnColsView(event)'>
-	<div class='UILabel'> Columns </div>
-	<div class='UIContent'>
-		<div class='column' id='col0'>
-		</div>
-	</div>
+<div id='newNodeDiv' class='UI'>
+	<div class='UILabel'> Create </div>
+	new node label :<input type='text' id='newNodeInputText'/>
+	<button class='button' onclick='createNodeView()' style='display:inline'>Create</button>
 </div>
-<script type='text/javascript'>
-addNode($('#col0'),{id:0,label:"Root"},null);
-</script>
 <div id='buffer' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnBuffer(this,event)'>
 	<div class='UILabel'> Buffer </div>
 </div>
@@ -37,17 +32,22 @@ addNode($('#col0'),{id:0,label:"Root"},null);
 	<div class='UILabel'> Contexts </div>
 	<div id='contextsNodeContainer' class='UIContent' data-containerid='contexts'></div>
 </div>
-<div id='newNodeDiv' class='UI'>
-	<div class='UILabel'> Create </div>
-	new node label :<input type='text' id='newNodeInputText'/>
-	<button class='button' onclick='createNodeView()' style='display:inline'>Create</button>
-</div>
 <div id='search' class='UI' ondragover='' ondrop=''>
 	<div class='UILabel'> Search </div>
 	<div class='UIContent' data-containerid='search'></div>
 	<input id="searchRequest" type='text' onkeydown='searchRequestModified()'></input>
 	<div id='searchResults'></div>
 </div>
+<div id='colsView'  class='UI' ondragover='allowdropColsView(event)' ondrop='dropNodeOnColsView(event)'>
+	<div class='UILabel'> Columns </div>
+	<div class='UIContent'>
+		<div class='column' id='col0'>
+		</div>
+	</div>
+</div>
+<script type='text/javascript'>
+addNode($('#col0'),{id:0,label:"Root"},null);
+</script>
 <div id='nodeEditor'  class='UI' style='display:none'>
 	<div class='UILabel'> Node editor </div>
 	<input id='nodeEditorLabel' type='text' id='nodeEditorLabel'></input>

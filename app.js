@@ -196,7 +196,7 @@ io.sockets.on('connection', function (socket) {
 				}
 			}
 			serializeNode(graphRepo,node,function(err) {
-				done();
+				done(node,nodeId);
 			});
 		});
 	});

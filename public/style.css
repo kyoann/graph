@@ -8,14 +8,14 @@ body {
 }
 .node {
 	background-color: rgb(246,246,246);
-	display: inline;
+	display: block;
 	padding: 5px;
 }
 .selectedNode {
 	border:1px solid black;
 	border-radius:5px;
 	background-color: white;
-	display: inline;
+	display: block;
 	padding: 5px;
 }
 .nodeWrapper {
@@ -24,8 +24,10 @@ body {
 }
 .UI {
 	display: inline-block;
-	border-top:5px solid rgb(163,163,163);
-	border-radius:5px;
+/*	
+ 	border-top:5px solid rgb(163,163,163);
+	border-radius:5px; 
+	*/
 	margin: 5px;
 	padding: 5px;
 	  font-family:"Tahoma","Geneva",sans-serif;

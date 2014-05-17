@@ -5,8 +5,17 @@ socket.on('connected',function(data) {
 });
 var $ = function(s) { return document.querySelector(s);}
 function init() {
+	shellContainer = $('#shellContainer');
 	addPrompt();
+	document.body.addEventListener('click',function(event) {
+		var activeShellInput = shell_getActiveShellInput();
+		if(activeShellInput) {
+			//activeShellInput.focus();
+			shellDiv.focus();
+		}
+	});
 }
+var shellContainer;  
 var shellDiv,promptSpan,inputSpan;
 function addPrompt() {
 	shellDiv = document.createElement('div');
@@ -16,7 +25,7 @@ function addPrompt() {
 	shellDiv.className = 'shell';
 	promptSpan.className = 'shellPrompt';
 	inputSpan.className = 'shellInput';
-	$('#shellContainer').appendChild(shellDiv);	
+	shellContainer.appendChild(shellDiv);	
 	shellDiv.appendChild(promptSpan);
 	shellDiv.appendChild(inputSpan);
 	promptSpan.innerHTML = '>&nbsp;'
@@ -27,28 +36,51 @@ function addPrompt() {
 }
 function processKeyboardEvent(e) {
 	//console.log(e);
-	if(e.keyIdentifier === "Enter" && e.shiftKey ) {
-		console.log("execute");
+	if(e.keyIdentifier === "Enter" && !e.shiftKey ) {
 		e.preventDefault();
-		e.target.contentEditable = false;
+		freezePrompt();	
 		var cmd = e.target.textContent;
 		shellParser.parse(cmd);
-		addPrompt();
 	}
 }
 
 function cmd_ls(label) {
-	freezePrompt();	
 	getNeighbours(getCurrentNodeId(),function(nodesModels) {
 		pushUI('neighbours',nodesModels);
 		addPrompt();
 	});
 }
-function cmd_navigate() {
-	navigator_append($('#shellContainer'),{label:"root",id:"0"});
+var uiIndex = 0;
+function getNextUIId() {
+	return "ui"+uiIndex++;
 }
-function pushUI(UIname,nodesModels) {
+function cmd_navigate() {
+	navigator_append(shellContainer,getNextUIId(),{label:"root",id:"0"});
+	addPrompt();
+}
+function cmd_create(label) {
+	createNode(label,[],function(createdNode) {
+		event_nodeCreated(createdNode);
+		nodesList_append(shellContainer,getNextUIId(),[createdNode]);
+		addPrompt();
+	});
+}
 //TODO
+var numberRe = /\d+/;
+function cmd_edit(label,isReadOnly) {
+	if(numberRe.test(label)) {
+		getNode(label,function(node) {
+			getNodeData(node.id,function(data){
+				node.data = data;
+				nodeEditor_append(shellContainer,getNextUIId(),node,isReadOnly);	
+				addPrompt();
+			});
+		});
+	}
+}
+
+function pushUI(UIname,nodesModels) {
+	//TODO
 }
 
 function getCurrentNodeId() {
@@ -57,4 +89,8 @@ function getCurrentNodeId() {
 }
 function freezePrompt() {
 	inputSpan.contentEditable = false;
+}
+function shell_getActiveShellInput() {
+	//	return document.querySelector('.shellInput[contenteditable]');
+	return inputSpan;
 }

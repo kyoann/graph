@@ -12,3 +12,16 @@ function event_nodeLinked(updatedNode) {
 		callbacks[i](updatedNode);
 	}
 }
+function event_nodeUnlinked(updatedNode,unlinkedNodeId) {
+	var callbacks = eventCallbackLinkTable.nodeUnlinked;
+	for(var i = 0 ; i < callbacks.length ; i++) {
+		callbacks[i](updatedNode,unlinkedNodeId);
+	}
+}
+function event_nodeCreated(createdNode) {
+	var callbacks = eventCallbackLinkTable.nodeCreated;
+	if(!eventCallbackLinkTable.nodeCreated) {return;}
+	for(var i = 0 ; i < callbacks.length ; i++) {
+		callbacks[i](createdNode);
+	}
+}

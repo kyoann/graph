@@ -14,14 +14,11 @@ function node_addNode(container, node, uiId) {
 	nodeDiv.dataset.nodeid = node.id;
 	nodeDiv.draggable = true;
 	nodeDiv.addEventListener('dragstart',function(event) {node_drag(event);},false);
-	nodeDiv.addEventListener('dragover',function(event) {ev.preventDefault();},false);
+	nodeDiv.addEventListener('dragover',function(event) {event.preventDefault();},false);
 	nodeDiv.addEventListener('drop',function(event) {node_dropOnNode(event);},false);
 	nodeDiv.textContent = node.label;
 
-	var outerNodeDiv = document.createElement("div");
-	outerNodeDiv.className = 'nodeWrapper';
-	outerNodeDiv.appendChild(nodeDiv);
-	container.appendChild(outerNodeDiv);
+	container.appendChild(nodeDiv);
 	return nodeDiv;
 }
 function node_drag(ev) {
@@ -47,13 +44,12 @@ function node_highLightNodeDiv(nodeDiv) {
 	var containerView = document.querySelector('#' + nodeDiv.dataset.containerid);
 	var currentNodeDiv = containerView.firstChild;
 	while(currentNodeDiv) {
-		var realNodeDiv = currentNodeDiv.firstChild;
-		if(realNodeDiv == nodeDiv) {
-			realNodeDiv.className = 'selectedNode';
+		if(currentNodeDiv == nodeDiv) {
+			currentNodeDiv.className = 'selectedNode';
 		}
 		else {
-			if(realNodeDiv && realNodeDiv.constructor.name == 'HTMLDivElement') {
-				realNodeDiv.className = 'node';
+			if(currentNodeDiv && currentNodeDiv.constructor.name == 'HTMLDivElement') {
+				currentNodeDiv.className = 'node';
 			}
 		}
 		currentNodeDiv = currentNodeDiv.nextSibling;
@@ -64,13 +60,17 @@ function node_getSelectedNodeView(container) {
 	return selectedNodeView;
 }
 function node_getNodeView(container,nodeId) {
-	var currentNodeView = container.firstChild;
-	while(currentNodeView) {
-		if(currentNodeView && currentNodeView.constructor.name == 'HTMLDivElement') {
-			if(currentNodeView.firstChild.dataset.nodeid === nodeId) {
-				return currentNodeView;
-			}
+	var nodes = container.querySelectorAll('.node');
+	for(var i = 0 ; i < nodes.length ; i++) {
+		if(nodes[i].id === nodeId) {
+			return nodes[i];
 		}
-		currentNodeView = currentNodeView.nextSibling;
+	}
+	//TODO
+	nodes = container.querySelectorAll('.selectedNode');
+	for(var i = 0 ; i < nodes.length ; i++) {
+		if(nodes[i].id === nodeId) {
+			return nodes[i];
+		}
 	}
 }
