@@ -25,6 +25,26 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 		dataInput.contentEditable = 'true';
 		var saveButton = document.createElement('button'); 
 		saveButton.textContent = "Save";
+		saveButton.addEventListener('click',function(event) {
+			var nodeInNodeEditorLabel0 = nodeModel.label;
+			var nodeInNodeEditorData0 = nodeModel.data;
+			var nodeInNodeEditorLabel1 = labelInput.textContent;
+			var nodeInNodeEditorData1 = dataInput.textContent;
+			if(nodeInNodeEditorLabel0 != nodeInNodeEditorLabel1) {
+				saveNodeLabel(nodeModel.id,nodeInNodeEditorLabel1,function(err) {
+					//TODO
+					console.log('save label')
+					nodeModel.label = nodeInNodeEditorLabel1;
+				});
+			}
+			if(nodeInNodeEditorData0 != nodeInNodeEditorData1) {
+				saveNodeData(nodeModel.id,nodeInNodeEditorData1,function(err) { 
+					//TODO
+					console.log('save data')
+					nodeModel.data = nodeInNodeEditorData1;
+				});
+			}
+		});
 		nodeEditorDiv.appendChild(saveButton);
 	}
 	//TODO

@@ -16,6 +16,9 @@ function setNodeNeighboursIds(request,done) {
 function getNode(nodeId,done) {
 	socket.emit('getNode',{nodeId:nodeId},done);
 }
+function getNodeUsingLabel(label,done) {
+	socket.emit('getNodeUsingLabel',{label:label},done);
+}
 function getNodeData(nodeId,done) {
 	socket.emit('getNodeData',{nodeId:nodeId},done);
 }

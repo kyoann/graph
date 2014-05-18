@@ -66,16 +66,33 @@ function cmd_create(label) {
 	});
 }
 //TODO
-var numberRe = /\d+/;
+var numberRe = /^\d+$/;
 function cmd_edit(label,isReadOnly) {
 	if(numberRe.test(label)) {
 		getNode(label,function(node) {
 			getNodeData(node.id,function(data){
 				node.data = data;
 				nodeEditor_append(shellContainer,getNextUIId(),node,isReadOnly);	
-				addPrompt();
+	addPrompt();
 			});
 		});
+	}
+	else {
+		getNodeUsingLabel(label,function(nodes) {
+			if(nodes.length ==1) {
+				var node = nodes[0];
+				getNodeData(node.id,function(data){
+					node.data = data;
+					nodeEditor_append(shellContainer,getNextUIId(),node,isReadOnly);	
+					addPrompt();
+				});
+			}
+			else{
+				//TODO
+				addPrompt();
+			}
+		});
+
 	}
 }
 

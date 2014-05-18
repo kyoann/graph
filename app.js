@@ -17,8 +17,29 @@ var graphRepo = '/Users/Johan/work/webProjects/graph/graphRepository';
 
 var indexData = fs.readFileSync(graphRepo + '/dataIndex.json',["utf8"]);
 var dataIndex = JSON.parse(indexData);
+var labelsWordsIndexData = fs.readFileSync(graphRepo + '/labelsWordsIndex.json',["utf8"]);
+var labelsWordsIndex = JSON.parse(labelsWordsIndexData);
 var labelsIndexData = fs.readFileSync(graphRepo + '/labelsIndex.json',["utf8"]);
 var labelsIndex = JSON.parse(labelsIndexData);
+function addToLabelsIndex(node) {
+	if(!labelsIndex[node.label]) {
+		labelsIndex[node.label] = [];
+	}
+	labelsIndex[node.label].push(node.id);
+}
+function removeFromLabelsIndex(nodeId,formerLabel) {
+	var nodesIds = labelsIndex[formerLabel];
+	var nextNodesIds = [];
+	for(var i = 0 ; i < nodesIds.length ; i++) {
+		if(nodesIds[i] == nodeId) {
+			continue;
+			//labelsIndex[formerLabel] = nodesIds.splice(i,1);
+			//break;
+		}
+		nextNodesIds.push(nodesIds[i]);
+	}
+	labelsIndex[formerLabel] = nextNodesIds;
+}
 
 io.sockets.on('connection', function (socket) {
 	console.log('connection');
@@ -32,10 +53,11 @@ io.sockets.on('connection', function (socket) {
 		serializeNode(graphRepo,node,function(err) {
 			if(err) throw err;
 			done(node);
+			for(var i = 0 ; i < request.context.length ; i++) {
+				linkNodes({nodeId1:request.context[i],nodeId2:lastAttributedId},function(node){});
+			}
+			addToLabelsIndex(node);
 		});
-		for(var i = 0 ; i < request.context.length ; i++) {
-			linkNodes({nodeId1:request.context[i],nodeId2:lastAttributedId},function(node){});
-		}
 	});
 
 	socket.on('getNode', function (request,done) {
@@ -43,6 +65,18 @@ io.sockets.on('connection', function (socket) {
 		deserializeNode(graphRepo,nodeId,function(err,node) {
 			if(err) throw err;
 			done(node);
+		});
+	});
+	socket.on('getNodeUsingLabel', function (request,done) {
+		var label = request.label;
+		var nodesIds = labelsIndex[label];
+		if(!nodesIds) {
+			done([]);
+			return;
+		}
+		deserializeNodes(graphRepo,nodesIds,0,[],function(err,nodes) {
+			if(err) throw err;
+			done(nodes);
 		});
 	});
 	socket.on('getNodeData', function(request,done) {
@@ -66,13 +100,14 @@ io.sockets.on('connection', function (socket) {
 		var label = request.label;
 		deserializeNode(graphRepo,nodeId,function(err,node) {
 			if(err) throw err;
+			var formerLabel = node.label;
 			node.label = label;
-			debugger;
 			serializeNode(graphRepo,node,function(err) {
 				//if(err) throw err;
 				if(err) console.log(err);
-				debugger;
 				done(err);
+				removeFromLabelsIndex(node.id,formerLabel);
+				addToLabelsIndex(node);
 			});
 		});
 	});
@@ -221,7 +256,7 @@ io.sockets.on('connection', function (socket) {
 		if(!dataResults) {
 			dataResults = [];
 		}
-		var labelsResults = labelsIndex[words[0].toLowerCase()];
+		var labelsResults = labelsWordsIndex[words[0].toLowerCase()];
 		if(!labelsResults) {
 			labelsResults = [];
 		}

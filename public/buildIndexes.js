@@ -25,6 +25,7 @@ var dataFiles = fs.readdirSync(dataPath);
 for(var i = 0 ; i < dataFiles.length ; i++) {
 	var data = fs.readFileSync(dataPath + dataFiles[i]);
 	var words = splitData(data.toString());
+	if(!words) {continue;}
 	sortedWords = words.sort();
 	var previousWord;
 	var currentWord;
@@ -51,6 +52,8 @@ fs.writeFile(dataIndexFile,JSON.stringify(dataIndex),['utf8'],function(err) {
 });
 
 var nodesPath = '../graphRepository/';
+var labelsWordsIndexFile = '../graphRepository/labelsWordsIndex.json';
+var labelsWordsIndex = {};
 var labelsIndexFile = '../graphRepository/labelsIndex.json';
 var labelsIndex = {};
 var nodesFiles = fs.readdirSync(nodesPath);
@@ -61,11 +64,16 @@ for(var i = 0 ; i < nodesFiles.length ; i++) {
 		continue;
 	}
 	var data = fs.readFileSync(nodesPath + nodesFiles[i],['utf8']);
-	console.log(nodesFiles[i] + ':' + data.toString());
 	var node = JSON.parse(data.toString());
-	console.log("file:"+nodesFiles[i]);
-	console.log("label:"+node.label);
+
+	if(!labelsIndex[node.label]) {
+		labelsIndex[node.label] = [];
+	}
+	labelsIndex[node.label].push(node.id); 
+	console.log(node.id+':'+node.label);
+
 	var words = splitData(node.label);
+	console.log(node.id+':'+node.label);
 	if(!words) {
 		continue;
 	}
@@ -78,18 +86,23 @@ for(var i = 0 ; i < nodesFiles.length ; i++) {
 			continue;
 		}	
 		debugger;
-		if(!labelsIndex[currentWord]) {
-			labelsIndex[currentWord] = [];
+		if(!labelsWordsIndex[currentWord]) {
+			labelsWordsIndex[currentWord] = [];
 		}
-		labelsIndex[currentWord].push(nodesFiles[i].substring(0,nodesFiles[i].length - 5));
+		labelsWordsIndex[currentWord].push(nodesFiles[i].substring(0,nodesFiles[i].length - 5));
 		previousWord = currentWord;
 	}
 }
 
-console.log(JSON.stringify(labelsIndex));
 fs.writeFile(labelsIndexFile,JSON.stringify(labelsIndex),['utf8'],function(err) {
 	if(err) {
 		throw(err);
 	}
-	console.log("labelsIndexing done");
+	console.log("labels Indexing done");
+});
+fs.writeFile(labelsWordsIndexFile,JSON.stringify(labelsWordsIndex),['utf8'],function(err) {
+	if(err) {
+		throw(err);
+	}
+	console.log("labels Words Indexing done");
 });
