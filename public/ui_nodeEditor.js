@@ -1,5 +1,9 @@
 function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	var nodeEditorDiv = document.createElement('div');
+	nodeEditorDiv.addEventListener('click',function(event) {
+		console.log("node editor div:clicked");
+		event.stopPropagation();
+	});
 	nodeEditorDiv.id = uiId;
 	var labelInput = document.createElement('div');
 	labelInput.className = 'nodeEditorLabel';
@@ -31,17 +35,19 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 			var nodeInNodeEditorLabel1 = labelInput.textContent;
 			var nodeInNodeEditorData1 = dataInput.textContent;
 			if(nodeInNodeEditorLabel0 != nodeInNodeEditorLabel1) {
-				saveNodeLabel(nodeModel.id,nodeInNodeEditorLabel1,function(err) {
+				saveNodeLabel(nodeModel.id,nodeInNodeEditorLabel1,function(node) {
 					//TODO
 					console.log('save label')
-					nodeModel.label = nodeInNodeEditorLabel1;
+					//nodeModel.label = nodeInNodeEditorLabel1;
+					event_nodeLabelModified(node);
 				});
 			}
 			if(nodeInNodeEditorData0 != nodeInNodeEditorData1) {
-				saveNodeData(nodeModel.id,nodeInNodeEditorData1,function(err) { 
+				saveNodeData(nodeModel.id,nodeInNodeEditorData1,function(node) { 
 					//TODO
 					console.log('save data')
 					nodeModel.data = nodeInNodeEditorData1;
+					event_nodeDataModified(node);
 				});
 			}
 		});
@@ -52,4 +58,20 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	//nodeEditorDiv.appendChild(linkInput);
 	//nodeEditorDiv.appendChild(addLinkButton);
 	container.appendChild(nodeEditorDiv);
+
+	event_addModelEventListener('nodeLabelModified',nodeEditor_createNodeLabelModifiedCB(nodeEditorDiv));
+	event_addModelEventListener('nodeDataModified',nodeEditor_createNodeDataModifiedCB(nodeEditorDiv));
+}
+
+function nodeEditor_createNodeLabelModifiedCB(nodeEditorDiv) {
+	return function(modifiedNode) {
+		var labelInput = nodeEditorDiv.querySelector('.nodeEditorLabel');
+		labelInput.textContent = modifiedNode.label;
+	}
+}
+function nodeEditor_createNodeDataModifiedCB(nodeEditorDiv) {
+	return function(modifiedNode) {
+		var dataInput = nodeEditorDiv.querySelector('.nodeEditorData');
+		dataInput.textContent = modifiedNode.data;
+	}
 }

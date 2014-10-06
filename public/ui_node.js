@@ -1,4 +1,5 @@
 function node_addNodes(container, nodesModels,uiId) {
+	console.log("node_addNodes:"+JSON.stringify(nodesModels));
 	var nodesViews = [];
 	for(var i = 0, length = nodesModels.length ; i < length ; i++) {
 		nodesViews.push(node_addNode(container, nodesModels[i],uiId));
@@ -6,6 +7,7 @@ function node_addNodes(container, nodesModels,uiId) {
 	return nodesViews;
 }
 function node_addNode(container, node, uiId) {
+	console.log("node_addNode:"+JSON.stringify(node));
 	var nodeDiv = document.createElement("div");
 	nodeDiv.className = 'node';
 	nodeDiv.id = container.id + 'Node' + node.id;
@@ -25,6 +27,7 @@ function node_drag(ev) {
 	ev.dataTransfer.setData("Text",ev.target.id);
 }
 function node_dropOnNode(ev) {
+	console.log("node_dropOnNode");
 	var draggedNodeViewId = ev.dataTransfer.getData('Text');
 	var draggedNodeView = document.querySelector('#'+draggedNodeViewId);
 	var draggedNodeId = draggedNodeView.dataset.nodeid;
@@ -39,6 +42,7 @@ function node_dropOnNode(ev) {
 		event_nodeLinked(updatedNode);	
 	});
 	ev.stopPropagation();
+	console.log("end of node_dropOnNode");
 }
 function node_highLightNodeDiv(nodeDiv) {
 	var containerView = document.querySelector('#' + nodeDiv.dataset.containerid);

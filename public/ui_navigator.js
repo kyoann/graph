@@ -16,11 +16,12 @@ function navigator_append(container,navigatorId,nodeModel) {
 	event_addModelEventListener('nodeUnlinked',navigator_createNodeUnlinkedCB(navigatorDiv));
 
 	navigatorDiv.addEventListener('dragover',function(event) {event.preventDefault();},false);
-	navigatorDiv.addEventListener('drop',function() {navigator_dropNodeOnNavigator(event);},false);
+	navigatorDiv.addEventListener('drop',function(event) {navigator_dropNodeOnNavigator(event);},false);
 
 	navigator_init(navigatorDiv,nodeModel);
 }
 function navigator_dropNodeOnNavigator(ev) {
+	console.log("navigator_dropNodeOnNavigator");
 	ev.stopPropagation();
 	var draggedNodeViewId = ev.dataTransfer.getData('Text');
 	var draggedNodeView = document.querySelector('#'+draggedNodeViewId);
@@ -46,7 +47,7 @@ function navigator_selected(navigatorDiv,nodeDiv,eraseColumnsAfter,done) {
 		node_highLightNodeDiv(nodeDiv);
 		var nextColumnDiv = navigator_getNextColumnDiv(navigatorDiv,nodeDiv);
 		navigator_initColumn(nextColumnDiv);
-		var nodesViews = node_addNodes(nextColumnDiv, neighbours.nodes,nodeDiv);
+		var nodesViews = node_addNodes(nextColumnDiv, neighbours,nodeDiv);
 		for(var i = 0 ; i < nodesViews.length ; i++) {
 			nodesViews[i].addEventListener('click',(function(nodeView) {return function() {navigator_selected(navigatorDiv,nodeView,true);};})(nodesViews[i]) );
 			nodesViews[i].dataset.parentNodeViewId = nodeDiv.id;
@@ -97,6 +98,8 @@ function navigator_init(navigatorDiv,nodeModel) {
 }
 
 function navigator_createNodeUnlinkedCB(navigatorDiv) {
+	console.log("navigator_createNodeUnLinkedCB");
+
 	return function(updatedNode,unlinkedNodeId) {
 		//for each col
 		//	if selected node = parentnode
@@ -135,6 +138,8 @@ function navigator_createNodeUnlinkedCB(navigatorDiv) {
 	}	
 }	
 function navigator_createNodeLinkedCB(navigatorDiv) {
+	console.log("navigator_createNodeLinkedCB");
+
 	return function(updatedNode) {
 		//for each col
 		//  if selected node = updated node

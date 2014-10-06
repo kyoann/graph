@@ -1,3 +1,4 @@
+/*
 var socket = io.connect('http://localhost:3000');
 socket.on('connected',function(data) {
 	//TODO
@@ -5,7 +6,7 @@ socket.on('connected',function(data) {
 	updateUI($('#favorites'),createOnClickCB1);
 	updateUI($('#contexts'),createOnClickCBContexts);
 });
-
+*/
 var $ = function(s) { return document.querySelector(s);}
 //var $ = document.querySelector;
 

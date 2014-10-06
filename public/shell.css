@@ -1,9 +1,13 @@
 #shellContainer {
-/*	font-family:"Tahoma","Geneva",sans-serif;
+/*
+	font-family:"Tahoma","Geneva",sans-serif;
  */
 }
 .shell {
 	margin-top: 15px;
+}
+.shellCloseButton {
+	float:right;
 }
 .shellPrompt {
 }
