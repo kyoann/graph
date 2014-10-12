@@ -8,6 +8,9 @@
 function lsDeserializeNode(nodeId) {
 	var nodeStr = localStorage.getItem("node"+nodeId);
 	console.log("deserialize "+nodeId+" "+nodeStr);
+	if(!nodeStr) {
+		return undefined;
+	}
 	var node = JSON.parse(nodeStr);
 	if(!node.neighbours) {
 		node.neighbours = [];
@@ -154,7 +157,12 @@ function linkFilesWithNode(nodeId,filesNames, done) {
 }
 function addNodeToFavorites(nodeId,done) {
 //	socket.emit('linkNodes',{nodeId1:'favorites',nodeId2:nodeId},done);
-	
+	var favorites = lsDeserializeNode('favorites');
+	if(!favorites) {
+		favorites = {id:'favorites', label:'favorites',neighbours:[]};
+		lsSerializeNode(favorites);
+	}
+	linkNodes('favorites', nodeId, function(favoritesNode) {done(favoritesNode);});	
 }
 function addNodeToContexts(nodeId,done) {
 //	socket.emit('linkNodes',{nodeId1:'contexts',nodeId2:nodeId},done);

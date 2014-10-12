@@ -5,10 +5,12 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 		event.stopPropagation();
 	});
 	nodeEditorDiv.id = uiId;
+	nodeEditorDiv.dataset.nodeId = nodeModel.id;
 	var labelInput = document.createElement('div');
 	labelInput.className = 'nodeEditorLabel';
 	var br1 = document.createElement('br');
-	var dataInput = document.createElement('div');
+//	var dataInput = document.createElement('div');
+	var dataInput = document.createElement('textarea');
 	dataInput.className = 'nodeEditorData';
 	var br2 = document.createElement('br');
 	var ul = document.createElement('ul');
@@ -24,7 +26,9 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	nodeEditorDiv.appendChild(br1);
 	nodeEditorDiv.appendChild(dataInput);
 	nodeEditorDiv.appendChild(br2);
-	if(!isReadOnly) {
+	if(isReadOnly) {
+		dataInput.disabled = true;
+	} else {
 		labelInput.contentEditable = 'true';
 		dataInput.contentEditable = 'true';
 		var saveButton = document.createElement('button'); 
@@ -33,7 +37,8 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 			var nodeInNodeEditorLabel0 = nodeModel.label;
 			var nodeInNodeEditorData0 = nodeModel.data;
 			var nodeInNodeEditorLabel1 = labelInput.textContent;
-			var nodeInNodeEditorData1 = dataInput.textContent;
+//			var nodeInNodeEditorData1 = dataInput.textContent;
+			var nodeInNodeEditorData1 = dataInput.value;
 			if(nodeInNodeEditorLabel0 != nodeInNodeEditorLabel1) {
 				saveNodeLabel(nodeModel.id,nodeInNodeEditorLabel1,function(node) {
 					//TODO
@@ -43,10 +48,10 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 				});
 			}
 			if(nodeInNodeEditorData0 != nodeInNodeEditorData1) {
+					console.log('save data2:'+nodeInNodeEditorData1);
 				saveNodeData(nodeModel.id,nodeInNodeEditorData1,function(node) { 
-					//TODO
 					console.log('save data')
-					nodeModel.data = nodeInNodeEditorData1;
+					//nodeModel.data = nodeInNodeEditorData1;
 					event_nodeDataModified(node);
 				});
 			}
@@ -65,13 +70,22 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 
 function nodeEditor_createNodeLabelModifiedCB(nodeEditorDiv) {
 	return function(modifiedNode) {
+		if(nodeEditorDiv.dataset.nodeId != modifiedNode.id) {
+			return;
+		}
 		var labelInput = nodeEditorDiv.querySelector('.nodeEditorLabel');
 		labelInput.textContent = modifiedNode.label;
 	}
 }
 function nodeEditor_createNodeDataModifiedCB(nodeEditorDiv) {
 	return function(modifiedNode) {
+		console.log("nodeEditorDiv.dataset.nodeId:"+nodeEditorDiv.dataset.nodeId);
+		console.log("modifiedNode.id:"+modifiedNode.id);
+		if(nodeEditorDiv.dataset.nodeId != modifiedNode.id) {
+			console.log("different");
+			return;
+		}
 		var dataInput = nodeEditorDiv.querySelector('.nodeEditorData');
-		dataInput.textContent = modifiedNode.data;
+		dataInput.value = modifiedNode.data;
 	}
 }

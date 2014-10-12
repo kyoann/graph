@@ -5,6 +5,9 @@ program = "cd" s label:label
 	/ "link" s label1:label s "to" s label2:label {cmd_link(label1,label2);}
 	/ "navigate" s? {cmd_navigate();}
 	/ "create" s? label:label {cmd_create(label);}
+	/ "unlink" s label1:label s "to" s label2:label {cmd_unlink(label1,label2);}
+	/ "add to favorites" s label:label {cmd_addToFavorites(label);}
+	
 
 label = label:( [a-z]i / [0-9] )+ { return label.join("");}
 

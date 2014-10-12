@@ -24,4 +24,6 @@
 .nodeEditorData {
 	background-color: rgb(246,246,246);
 	margin-top:5px;
+	width:100%;
+	border: 0px solid black
 }

@@ -46,18 +46,13 @@ function node_dropOnNode(ev) {
 }
 function node_highLightNodeDiv(nodeDiv) {
 	var containerView = document.querySelector('#' + nodeDiv.dataset.containerid);
-	var currentNodeDiv = containerView.firstChild;
-	while(currentNodeDiv) {
-		if(currentNodeDiv == nodeDiv) {
-			currentNodeDiv.className = 'selectedNode';
-		}
-		else {
-			if(currentNodeDiv && currentNodeDiv.constructor.name == 'HTMLDivElement') {
-				currentNodeDiv.className = 'node';
-			}
-		}
-		currentNodeDiv = currentNodeDiv.nextSibling;
+
+	var selectedNode = containerView.querySelector('.selectedNode');
+	if(selectedNode) {
+		selectedNode.className = 'node';
 	}
+
+	nodeDiv.className = 'selectedNode';
 }
 function node_getSelectedNodeView(container) {
 	var selectedNodeView = container.querySelector('.selectedNode');
