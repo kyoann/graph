@@ -21,8 +21,9 @@ function navigator_append(container,navigatorId,nodeModel) {
 	navigator_init(navigatorDiv,nodeModel);
 }
 function navigator_dropNodeOnNavigator(ev) {
-	console.log("navigator_dropNodeOnNavigator");
 	ev.stopPropagation();
+	ev.preventDefault();
+
 	var draggedNodeViewId = ev.dataTransfer.getData('Text');
 	var draggedNodeView = document.querySelector('#'+draggedNodeViewId);
 	var draggedNodeId = draggedNodeView.dataset.nodeid;
@@ -63,7 +64,6 @@ function navigator_getNextColumnDiv(navigatorDiv,nodeDiv) {
 	var columnDiv = $('#'+nodeDiv.dataset.containerid);
 	var res = re.exec(columnDiv.id);
 	if(!res || res.length < 2) {
-		console.log("navigator incoherence")
 		return;
 	}
 	var colNumber = parseInt(res[1]);
@@ -98,7 +98,6 @@ function navigator_init(navigatorDiv,nodeModel) {
 }
 
 function navigator_createNodeUnlinkedCB(navigatorDiv) {
-	console.log("navigator_createNodeUnLinkedCB");
 
 	return function(updatedNode,unlinkedNodeId) {
 		//for each col
@@ -138,7 +137,6 @@ function navigator_createNodeUnlinkedCB(navigatorDiv) {
 	}	
 }	
 function navigator_createNodeLinkedCB(navigatorDiv) {
-	console.log("navigator_createNodeLinkedCB");
 
 	return function(updatedNode) {
 		//for each col

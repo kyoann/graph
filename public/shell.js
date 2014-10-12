@@ -12,7 +12,6 @@ function init() {
 	shellContainer = $('#shellContainer');
 	addPrompt();
 	document.body.addEventListener('click',function(event) {
-		console.log("body clicked");
 		var activeShellInput = shell_getActiveShellInput();
 		if(activeShellInput) {
 			activeShellInput.focus();
@@ -99,7 +98,6 @@ function cmd_navigate() {
 }
 function cmd_create(label) {
 	createNode(label,[],function(createdNode) {
-		console.log("creation of node :"+createdNode.id);
 		event_nodeCreated(createdNode);
 		nodesList_append(shellContainer,getNextUIId(),[createdNode]);
 		addPrompt();
@@ -111,7 +109,6 @@ function cmd_edit(label,isReadOnly) {
 	if(numberRe.test(label)) {
 		getNode(label,function(node) {
 			getNodeData(node.id,function(data){
-				console.log("cmd_edit:"+JSON.stringify(node));
 				node.data = data;
 				nodeEditor_append(shellContainer,getNextUIId(),node,isReadOnly);	
 				addPrompt();
@@ -137,16 +134,12 @@ function cmd_edit(label,isReadOnly) {
 	}
 }
 function cmd_link(label1,label2) {
-	console.log("linking "+label1+" to "+label2);
 	getNode(label1, function(node1) {
 		getNode(label2,function(node2) {
-			console.log(JSON.stringify(node1)+"->"+JSON.stringify(node2));
 			linkNodes(node1.id,node2.id,function(aNode1) {
-				console.log(JSON.stringify(aNode1));
 				event_nodeLinked(aNode1);
 				linkNodes(node2.id,node1.id,function(aNode2) {
 					event_nodeLinked(aNode2);
-					console.log(JSON.stringify(aNode2));
 					addPrompt();
 				});
 			});
@@ -154,16 +147,12 @@ function cmd_link(label1,label2) {
 	});
 }
 function cmd_unlink(label1,label2) {
-	console.log("unlinking "+label1+" to "+label2);
 	getNode(label1, function(node1) {
 		getNode(label2,function(node2) {
-			console.log(JSON.stringify(node1)+"->"+JSON.stringify(node2));
 			unlinkNodes(node1.id,node2.id,function(aNode1) {
-				console.log(JSON.stringify(aNode1));
 				event_nodeUnlinked(aNode1);
 				unlinkNodes(node2.id,node1.id,function(aNode2) {
 					event_nodeUnlinked(aNode2);
-					console.log(JSON.stringify(aNode2));
 					addPrompt();
 				});
 			});

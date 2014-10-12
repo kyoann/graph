@@ -7,7 +7,6 @@
 
 function lsDeserializeNode(nodeId) {
 	var nodeStr = localStorage.getItem("node"+nodeId);
-	console.log("deserialize "+nodeId+" "+nodeStr);
 	if(!nodeStr) {
 		return undefined;
 	}
@@ -19,7 +18,6 @@ function lsDeserializeNode(nodeId) {
 }
 function lsSerializeNode(node) {
 	var nodeStr = JSON.stringify(node);
-	console.log("serializing:"+nodeStr);
 	localStorage.setItem("node"+node.id,nodeStr);
 }
 
@@ -31,7 +29,6 @@ function modelInit() {
 		
 		localStorage.node0 = JSON.stringify(node);
 		localStorage.lastAttributedId = 0;
-		console.log(JSON.stringify(localStorage));
 	}
 }
 modelInit();
@@ -62,11 +59,9 @@ function createNode(nodeLabel,context,done) {
 	node.label = nodeLabel;
 	lsSerializeNode(node);
 	done(node);
-	console.log("creation of node "+node.id);
 }
 function linkNodes(nodeId1,nodeId2,done) {
 //	socket.emit('linkNodes',{nodeId1:nodeId1,nodeId2:nodeId2},done);
-	console.log("linkNodes");
 	var node1 = lsDeserializeNode(nodeId1);
 	node1.neighbours.push(nodeId2);
 
@@ -89,7 +84,6 @@ function setNodeNeighboursIds(request,done) {
 }
 var numberRe = /^\d+$/;
 function getNode(nodeIdOrLabel,done) {
-	console.log("getNode:"+nodeIdOrLabel);
 	if(numberRe.test(nodeIdOrLabel)) {
 		var node = lsDeserializeNode(nodeIdOrLabel);
 		done(node);
@@ -106,7 +100,6 @@ function getNode(nodeIdOrLabel,done) {
 }
 function getNodeUsingLabel(label,done) {
 //	socket.emit('getNodeUsingLabel',{label:label},done);
-	console.log("getNodeUsingLabel:"+label);
 	var nodes = [];
 	for(x in localStorage) {
 		//TODO
@@ -116,7 +109,6 @@ function getNodeUsingLabel(label,done) {
 		}
 		var node = lsDeserializeNode(x.substring(4));
 
-		console.log("getNodeUsingLabel:"+JSON.stringify(node));
 		if(node && node.label.search(label) !== -1) {
 			nodes.push(node);
 		}
@@ -125,7 +117,6 @@ function getNodeUsingLabel(label,done) {
 }
 function getNodeData(nodeId,done) {
 //	socket.emit('getNodeData',{nodeId:nodeId},done);
-	console.log("getNodeData:"+JSON.stringify(nodeId));
 	var node = lsDeserializeNode(nodeId);
 	done(node.data);
 }
@@ -146,7 +137,6 @@ function saveNodeData(nodeId,data,done) {
 	var node = lsDeserializeNode(nodeId);
 	node.data = data;
 	lsSerializeNode(node);
-	console.log("savenodedata:"+data);
 	done(node);
 }
 function linkFilesWithNode(nodeId,filesNames, done) {

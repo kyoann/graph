@@ -1,7 +1,6 @@
 function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	var nodeEditorDiv = document.createElement('div');
 	nodeEditorDiv.addEventListener('click',function(event) {
-		console.log("node editor div:clicked");
 		event.stopPropagation();
 	});
 	nodeEditorDiv.id = uiId;
@@ -21,7 +20,20 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	labelInput.textContent = nodeModel.label;
 	dataInput.textContent = nodeModel.data;
 
-
+//fit textarea to size
+	if(nodeModel.data) {
+	//	var nLines = nodeModel.data.split('\n').length;
+		var nLines = 0;
+		var i = 0;
+		nLines = 1;
+		while((i = nodeModel.data.indexOf('\n',i)) >= 0) {
+			nLines++;
+			;	
+			i++;
+		}
+		dataInput.rows = nLines;
+	}
+	//
 	nodeEditorDiv.appendChild(labelInput);
 	nodeEditorDiv.appendChild(br1);
 	nodeEditorDiv.appendChild(dataInput);
@@ -37,20 +49,17 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 			var nodeInNodeEditorLabel0 = nodeModel.label;
 			var nodeInNodeEditorData0 = nodeModel.data;
 			var nodeInNodeEditorLabel1 = labelInput.textContent;
-//			var nodeInNodeEditorData1 = dataInput.textContent;
+			//			var nodeInNodeEditorData1 = dataInput.textContent;
 			var nodeInNodeEditorData1 = dataInput.value;
 			if(nodeInNodeEditorLabel0 != nodeInNodeEditorLabel1) {
 				saveNodeLabel(nodeModel.id,nodeInNodeEditorLabel1,function(node) {
 					//TODO
-					console.log('save label')
 					//nodeModel.label = nodeInNodeEditorLabel1;
 					event_nodeLabelModified(node);
 				});
 			}
 			if(nodeInNodeEditorData0 != nodeInNodeEditorData1) {
-					console.log('save data2:'+nodeInNodeEditorData1);
 				saveNodeData(nodeModel.id,nodeInNodeEditorData1,function(node) { 
-					console.log('save data')
 					//nodeModel.data = nodeInNodeEditorData1;
 					event_nodeDataModified(node);
 				});
@@ -79,10 +88,7 @@ function nodeEditor_createNodeLabelModifiedCB(nodeEditorDiv) {
 }
 function nodeEditor_createNodeDataModifiedCB(nodeEditorDiv) {
 	return function(modifiedNode) {
-		console.log("nodeEditorDiv.dataset.nodeId:"+nodeEditorDiv.dataset.nodeId);
-		console.log("modifiedNode.id:"+modifiedNode.id);
 		if(nodeEditorDiv.dataset.nodeId != modifiedNode.id) {
-			console.log("different");
 			return;
 		}
 		var dataInput = nodeEditorDiv.querySelector('.nodeEditorData');
