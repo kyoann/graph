@@ -9,6 +9,7 @@ socket.on('connected',function(data) {
 */
 var $ = function(s) { return document.querySelector(s);}
 function init() {
+	
 	shellContainer = $('#shellContainer');
 	addPrompt();
 	document.body.addEventListener('click',function(event) {
@@ -18,6 +19,12 @@ function init() {
 			//shellDiv.focus();
 		}
 	});
+
+	document.body.addEventListener('drop',function(event) {
+		event.preventDefault();
+	}, false);
+	
+
 }
 var shellContainer;  
 var shellDiv,promptSpan,inputSpan;
@@ -32,7 +39,8 @@ function showCloseButton() {
 }
 
 function addPrompt() {
-	shellDiv = document.createElement('div');
+	var lShellDiv = document.createElement('div');
+	shellDiv = lShellDiv;
 	promptSpan = document.createElement('span');
 	//var inputSpan = document.createElement('textarea');
 	inputSpan = document.createElement('span');
@@ -46,6 +54,10 @@ function addPrompt() {
 	closeButton.textContent = 'X';
 	closeButton.className = 'shellCloseButton';
 	closeButton.style.display = 'none';
+
+	closeButton.addEventListener('click',function(event) {
+		shellContainer.removeChild(lShellDiv);
+	});
 	shellDiv.appendChild(closeButton);
 //	
 	shellDiv.appendChild(promptSpan);
@@ -90,9 +102,11 @@ var uiIndex = 0;
 function getNextUIId() {
 	return "ui"+uiIndex++;
 }
-function cmd_navigate() {
+function cmd_navigate(label) {
 	getNode(0,function(rootNode) {
-		navigator_append(shellContainer,getNextUIId(),rootNode);
+		var div = document.createElement('div');
+		shellDiv.appendChild(div);
+		navigator_append(div,getNextUIId(),rootNode);
 		addPrompt();
 	});
 }
@@ -106,11 +120,14 @@ function cmd_create(label) {
 //TODO
 var numberRe = /^\d+$/;
 function cmd_edit(label,isReadOnly) {
+		var div = document.createElement('div');
+		shellDiv.appendChild(div);
+
 	if(numberRe.test(label)) {
 		getNode(label,function(node) {
 			getNodeData(node.id,function(data){
 				node.data = data;
-				nodeEditor_append(shellContainer,getNextUIId(),node,isReadOnly);	
+				nodeEditor_append(div,getNextUIId(),node,isReadOnly);	
 				addPrompt();
 			});
 		});
@@ -121,7 +138,7 @@ function cmd_edit(label,isReadOnly) {
 				var node = nodes[0];
 				getNodeData(node.id,function(data){
 					node.data = data;
-					nodeEditor_append(shellContainer,getNextUIId(),node,isReadOnly);	
+					nodeEditor_append(div,getNextUIId(),node,isReadOnly);	
 					addPrompt();
 				});
 			}
@@ -159,6 +176,15 @@ function cmd_unlink(label1,label2) {
 		});
 	});
 }
+function cmd_search(label) {
+	search(label,function(nodes) {
+		var div = document.createElement('div');
+		shellDiv.appendChild(div);
+		nodesList_append(div,getNextUIId(),nodes);
+		addPrompt();
+	});
+}
+
 function pushUI(UIname,nodesModels) {
 	//TODO
 }
@@ -173,4 +199,35 @@ function freezePrompt() {
 function shell_getActiveShellInput() {
 	//	return document.querySelector('.shellInput[contenteditable]');
 	return inputSpan;
+}
+
+function cmd_exportState() {
+		var div = document.createElement('div');
+		shellDiv.appendChild(div);
+		lsGetState(function(state) {
+			div.textContent = state;
+			addPrompt();
+		});
+}
+
+function cmd_importState() {
+		var div = document.createElement('div');
+		div.addEventListener('click',function(e) {
+			e.stopPropagation();
+		});
+		shellDiv.appendChild(div);
+		var textInput = document.createElement('input');
+		textInput.type = 'text';	
+		var textInputValidateButton = document.createElement('button');
+		textInputValidateButton.textContent = 'Import';
+		textInputValidateButton.addEventListener('click',function(event) {
+			lsSetState(textInput.textContent, function() {
+				div.removeChild(textInput);
+				div.removeChild(textInputValidateButton);
+				div.textContent = 'done';
+			});
+		});
+		div.appendChild(textInput);		
+		div.appendChild(textInputValidateButton);
+		addPrompt();		
 }

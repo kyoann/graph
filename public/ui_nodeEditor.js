@@ -18,8 +18,11 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	addLinkButton.textContent = "Add link";
 
 	labelInput.textContent = nodeModel.label;
-	dataInput.textContent = nodeModel.data;
-
+	if(nodeModel.data) {
+		dataInput.textContent = nodeModel.data;
+	} else {
+		dataInput.textContent = "";
+	}
 //fit textarea to size
 	if(nodeModel.data) {
 	//	var nLines = nodeModel.data.split('\n').length;

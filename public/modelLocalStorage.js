@@ -159,7 +159,40 @@ function addNodeToContexts(nodeId,done) {
 }
 function search(request,done) {
 //	socket.emit('dataSearch',{request:request},done);
+	var nodes = [];
+	for(x in localStorage) {
+		//TODO
+		var i = x.indexOf("node");
+		if(i !== 0) {
+			continue;
+		}
+		var node = lsDeserializeNode(x.substring(4));
+
+		if(node && node.data && node.data.search(request) !== -1) {
+			nodes.push(node);
+		}
+	}
+	done(nodes);
 }
 function getContextResultSet(context, done) {
 //	socket.emit('getContextResultSet',context,done);
+}
+
+function lsGetState(done) {
+
+	var state = {};
+	for(x in localStorage) {
+		//TODO
+		state[x]=localStorage.getItem(x);
+	}
+	done(JSON.stringify(state));
+	console.log(JSON.stringify(state));
+}
+
+function lsSetState(state,done) {
+	var state = JSON.parse(state);
+	for(x in state) {
+		localStorage.setItem(x,state[x]);
+	}
+	done();
 }
