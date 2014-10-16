@@ -1,3 +1,9 @@
+button {
+	border: 0px solid black;
+	border-radius: 10px;
+	color: rgb(50,50,50);
+}
+
 #shellContainer {
 /*
 	font-family:"Tahoma","Geneva",sans-serif;
@@ -10,10 +16,17 @@
 	float:right;
 }
 .shellPrompt {
+/*	border-radius: 10px;
+	color: rgb(250,250,250);
+	background-color: rgb(230,230,230);
+	padding: 3px;
+	margin-right: 3px;
+*/
 }
 .shellInput:focus {
 	outline: none;
-}
+/*	margin-left: 3px;
+*/}
 [contenteditable]:focus { outline: 0px solid transparent; }
 
 .nodeEditorLabel {

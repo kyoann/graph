@@ -2,6 +2,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script>
+window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+ 
+                if(!window.indexedDB)
+                {
+                    console.log("Your Browser does not support IndexedDB");
+                }
+else {
+console.log("ok indexeddb");
+}
+</script>
 <style>
 #grad1
 {

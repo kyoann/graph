@@ -41,15 +41,9 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	nodeEditorDiv.appendChild(br1);
 	nodeEditorDiv.appendChild(dataInput);
 	nodeEditorDiv.appendChild(br2);
-	if(isReadOnly) {
-		dataInput.disabled = true;
-	} else {
-		labelInput.contentEditable = 'true';
-		dataInput.contentEditable = 'true';
-		var saveButton = document.createElement('button'); 
-		saveButton.textContent = "Save";
-		saveButton.addEventListener('click',function(event) {
-			var nodeInNodeEditorLabel0 = nodeModel.label;
+	
+	var saveCB = function() {
+		var nodeInNodeEditorLabel0 = nodeModel.label;
 			var nodeInNodeEditorData0 = nodeModel.data;
 			var nodeInNodeEditorLabel1 = labelInput.textContent;
 			//			var nodeInNodeEditorData1 = dataInput.textContent;
@@ -67,8 +61,43 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 					event_nodeDataModified(node);
 				});
 			}
+	}
+
+	var makeEditorModifiable = function() {
+//		labelInput.contentEditable = 'true';
+//		dataInput.contentEditable = 'true';
+		dataInput.readOnly = false;
+		var saveButton = document.createElement('button'); 
+		saveButton.textContent = "Save";
+		saveButton.addEventListener('click',function(event) {
+			saveCB();
 		});
 		nodeEditorDiv.appendChild(saveButton);
+
+
+
+		labelInput.addEventListener('keydown',function(e) {
+			if( (e.keyIdentifier === "S" && e.ctrlKey) || (e.keyCode === 83 && e.ctrlKey) ) {
+				e.preventDefault();
+				saveCB();
+			}	
+		});
+		dataInput.addEventListener('keydown',function(e) {
+			if( (e.keyIdentifier === "S" && e.ctrlKey) || (e.keyCode === 83 && e.ctrlKey) ) {
+				e.preventDefault();
+				saveCB();
+			}	
+		});
+	}
+	if(isReadOnly) {
+		dataInput.readOnly = true;
+		//TODO
+		dataInput.addEventListener('dblclick',function(e) {
+			console.log("dblclick");
+			makeEditorModifiable();
+		});
+	} else {
+		makeEditorModifiable();
 	}
 	//TODO
 	//nodeEditorDiv.appendChild(ul);

@@ -42,7 +42,7 @@ function addPrompt() {
 	var lShellDiv = document.createElement('div');
 	shellDiv = lShellDiv;
 	promptSpan = document.createElement('span');
-	//var inputSpan = document.createElement('textarea');
+//	promptSpan = document.createElement('div');
 	inputSpan = document.createElement('span');
 	shellDiv.className = 'shell';
 	promptSpan.className = 'shellPrompt';
@@ -106,7 +106,7 @@ function cmd_navigate(label) {
 	getNode(0,function(rootNode) {
 		var div = document.createElement('div');
 		shellDiv.appendChild(div);
-		navigator_append(div,getNextUIId(),rootNode);
+		navigator_append(div,getNextUIId(),[rootNode]);
 		addPrompt();
 	});
 }

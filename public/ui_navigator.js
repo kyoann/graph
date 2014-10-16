@@ -1,4 +1,4 @@
-function navigator_append(container,navigatorId,nodeModel) {
+function navigator_append(container,navigatorId,nodesModels) {
 	var navigatorDiv = ui_createUI(navigatorId,'');
 	/*navigatorDiv.id = navigatorId;
 	navigatorDiv.className = 'UI';
@@ -18,7 +18,7 @@ function navigator_append(container,navigatorId,nodeModel) {
 	navigatorDiv.addEventListener('dragover',function(event) {event.preventDefault();},false);
 	navigatorDiv.addEventListener('drop',function(event) {navigator_dropNodeOnNavigator(event);},false);
 
-	navigator_init(navigatorDiv,nodeModel);
+	navigator_init(navigatorDiv,nodesModels);
 }
 function navigator_dropNodeOnNavigator(ev) {
 	ev.stopPropagation();
@@ -87,13 +87,13 @@ function navigator_eraseColumnsAfter(navigatorDiv,columnDiv) {
 	}
 }
 
-function navigator_init(navigatorDiv,nodeModel) {
+function navigator_init(navigatorDiv,nodesModels) {
 	navigatorDiv.querySelector('.UIContent').innerHTML = '';
 	var column0 = document.createElement('div');
 	column0.id = navigatorDiv.id+'col0';
 	column0.className = 'column';
 	navigatorDiv.querySelector('.UIContent').appendChild(column0);
-	var nodeDiv = node_addNode(column0,nodeModel,navigatorDiv.id);
+	var nodeDiv = node_addNodes(column0,nodesModels,navigatorDiv.id);
 	nodeDiv.addEventListener('click',function() {navigator_selected(navigatorDiv,nodeDiv,true)});
 }
 

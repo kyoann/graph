@@ -4,13 +4,16 @@ program = "cd" s label:label
 	/ "view" s label:label {cmd_edit(label,true);}
 	/ "link" s label:label {cmd_link(label);}
 	/ "to" s label:label  {cmd_link(label);}
-	/ "navigate" (s label:label)? {cmd_navigate(label);}
+	/ "navigate" s label:label {cmd_navigate(label);}
+	/ "navigate" {cmd_navigate();}
 	/ "create" s label:label {cmd_create(label);}
 	/ "unlink" s label1:label s "to" s label2:label {cmd_unlink(label1,label2);}
 	/ "add to favorites" s label:label {cmd_addToFavorites(label);}
 	/ "search" label:label {cmd_search(label);}
 	/ "export state" {cmd_exportState();}
 	/ "import state" {cmd_importState();}
+	/ s
+	/ ""
 	
 
 
