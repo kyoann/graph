@@ -14,3 +14,12 @@ function ui_createUI(uiId,label) {
 function ui_getContentDiv(uiDiv) {
 	return uiDiv.querySelector('.UIContent');
 }
+
+var uiIndex = 0;
+function getNextUIId() {
+	return "ui"+uiIndex++;
+}
+
+function ui_nextUIId() {
+	return "ui"+uiIndex++;
+}

@@ -294,7 +294,7 @@ function dropNodeOnUI(container,ev) {
 		});
 	}
 	if(container.id === 'contexts') {
-		//HERE
+		//TODO
 		addNodeToContexts(draggedNodeId,function(contextsNodes){
 			updateUI(container,createOnClickCBContexts);
 		});

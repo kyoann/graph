@@ -13,6 +13,7 @@ function init() {
 	shellContainer = $('#shellContainer');
 	addPrompt();
 	document.body.addEventListener('click',function(event) {
+		console.log("body clicked");
 		var activeShellInput = shell_getActiveShellInput();
 		if(activeShellInput) {
 			activeShellInput.focus();
@@ -23,8 +24,6 @@ function init() {
 	document.body.addEventListener('drop',function(event) {
 		event.preventDefault();
 	}, false);
-	
-
 }
 var shellContainer;  
 var shellDiv,promptSpan,inputSpan;
@@ -80,15 +79,16 @@ function processKeyboardEvent(e) {
 		e.preventDefault();
 		freezePrompt();	
 		var cmd = e.target.textContent;
-		try {
+//		try {
 			showCloseButton();
 			shellParser.parse(cmd);
-		}
-		catch(e) {
+//		}
+/*		catch(e) {
 			addErrorMessage(e.toString());
 			showCloseButton();
 			addPrompt();
 		}
+*/
 	}
 }
 
@@ -97,10 +97,6 @@ function cmd_ls(label) {
 		pushUI('neighbours',nodesModels);
 		addPrompt();
 	});
-}
-var uiIndex = 0;
-function getNextUIId() {
-	return "ui"+uiIndex++;
 }
 function cmd_navigate(label) {
 	getNode(0,function(rootNode) {
@@ -111,7 +107,7 @@ function cmd_navigate(label) {
 	});
 }
 function cmd_create(label) {
-	createNode(label,[],function(createdNode) {
+	createNode(label,function(createdNode) {
 		event_nodeCreated(createdNode);
 		nodesList_append(shellContainer,getNextUIId(),[createdNode]);
 		addPrompt();
@@ -135,6 +131,7 @@ function cmd_edit(label,isReadOnly) {
 	else {
 		getNodeUsingLabel(label,function(nodes) {
 			if(nodes.length ==1) {
+
 				var node = nodes[0];
 				getNodeData(node.id,function(data){
 					node.data = data;
@@ -143,7 +140,18 @@ function cmd_edit(label,isReadOnly) {
 				});
 			}
 			else{
-				//TODO
+				var createDblClickCB = function(nodeDiv) {
+					return function() {
+getNode(nodeDiv.dataset.nodeid,function(node) {
+		getNodeData(node.id,function(data){
+			node.data = data;
+			nodeEditor_append(div,getNextUIId(),node,true);	
+		});
+	});
+	
+					}
+				};
+				navigator_append(div,getNextUIId(),nodes,createDblClickCB);
 				addPrompt();
 			}
 		});

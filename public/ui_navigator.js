@@ -1,16 +1,6 @@
-function navigator_append(container,navigatorId,nodesModels) {
-	var navigatorDiv = ui_createUI(navigatorId,'');
-	/*navigatorDiv.id = navigatorId;
-	navigatorDiv.className = 'UI';
-	var labelDiv = document.createElement('div');
-	labelDiv.className = 'UILabel';
-	labelDiv.innerHTML = 'Navigator';
-	var contentDiv = document.createElement('div');
-	contentDiv.className = 'UIContent';
-	container.appendChild(navigatorDiv);
-	navigatorDiv.appendChild(labelDiv);
-	navigatorDiv.appendChild(contentDiv);
-       */
+function navigator_append(container,navigatorId,nodesModels,createSblClickCB) {
+	var navigatorDiv = ui_createUI(navigatorId,'Navigator');
+	
 	container.appendChild(navigatorDiv);
 	event_addModelEventListener('nodeLinked',navigator_createNodeLinkedCB(navigatorDiv));
 	event_addModelEventListener('nodeUnlinked',navigator_createNodeUnlinkedCB(navigatorDiv));
@@ -18,7 +8,7 @@ function navigator_append(container,navigatorId,nodesModels) {
 	navigatorDiv.addEventListener('dragover',function(event) {event.preventDefault();},false);
 	navigatorDiv.addEventListener('drop',function(event) {navigator_dropNodeOnNavigator(event);},false);
 
-	navigator_init(navigatorDiv,nodesModels);
+	navigator_init(navigatorDiv,nodesModels,createSblClickCB);
 }
 function navigator_dropNodeOnNavigator(ev) {
 	ev.stopPropagation();
@@ -50,7 +40,7 @@ function navigator_selected(navigatorDiv,nodeDiv,eraseColumnsAfter,done) {
 		navigator_initColumn(nextColumnDiv);
 		var nodesViews = node_addNodes(nextColumnDiv, neighbours,nodeDiv);
 		for(var i = 0 ; i < nodesViews.length ; i++) {
-			nodesViews[i].addEventListener('click',(function(nodeView) {return function() {navigator_selected(navigatorDiv,nodeView,true);};})(nodesViews[i]) );
+			nodesViews[i].addEventListener('click',(function(nodeView) {return function(e) {console.log("toto");e.stopPropagation();navigator_selected(navigatorDiv,nodeView,true);};})(nodesViews[i]) );
 			nodesViews[i].dataset.parentNodeViewId = nodeDiv.id;
 		}
 		if(eraseColumnsAfter == true) {
@@ -61,7 +51,7 @@ function navigator_selected(navigatorDiv,nodeDiv,eraseColumnsAfter,done) {
 }
 var re = /(\d+)$/;
 function navigator_getNextColumnDiv(navigatorDiv,nodeDiv) {
-	var columnDiv = $('#'+nodeDiv.dataset.containerid);
+	var columnDiv = document.querySelector('#'+nodeDiv.dataset.containerid);
 	var res = re.exec(columnDiv.id);
 	if(!res || res.length < 2) {
 		return;
@@ -87,14 +77,24 @@ function navigator_eraseColumnsAfter(navigatorDiv,columnDiv) {
 	}
 }
 
-function navigator_init(navigatorDiv,nodesModels) {
+function navigator_init(navigatorDiv,nodesModels,createDblClickCB) {
 	navigatorDiv.querySelector('.UIContent').innerHTML = '';
 	var column0 = document.createElement('div');
 	column0.id = navigatorDiv.id+'col0';
 	column0.className = 'column';
 	navigatorDiv.querySelector('.UIContent').appendChild(column0);
-	var nodeDiv = node_addNodes(column0,nodesModels,navigatorDiv.id);
-	nodeDiv.addEventListener('click',function() {navigator_selected(navigatorDiv,nodeDiv,true)});
+	var nodeDivs = node_addNodes(column0,nodesModels,navigatorDiv.id);
+	for(var i = 0 ; i <nodeDivs.length ; i++) {
+		var nodeDiv = nodeDivs[i];
+		nodeDiv.addEventListener('click',navigator_createNodeSelectedCB(navigatorDiv,nodeDiv));
+		if(createDblClickCB) {
+			nodeDiv.addEventListener('dblclick',createDblClickCB(nodeDiv));
+		}
+	}
+}
+
+function navigator_createNodeSelectedCB(navigatorDiv, nodeDiv) {
+	return function(e) {e.stopPropagation();navigator_selected(navigatorDiv,nodeDiv,true);};
 }
 
 function navigator_createNodeUnlinkedCB(navigatorDiv) {

@@ -5,6 +5,8 @@
 }
 */
 
+var model_lsContext = [];
+
 function lsDeserializeNode(nodeId) {
 	var nodeStr = localStorage.getItem("node"+nodeId);
 	if(!nodeStr) {
@@ -51,7 +53,7 @@ function lsGetNodesById(nodesIds,nodes,i,done) {
 	});
 }
 
-function createNode(nodeLabel,context,done) {
+function createNode(nodeLabel,done) {
 //	socket.emit('createNode',{label:nodeLabel,context:context},done);
 	
 	var node = {};
@@ -196,3 +198,32 @@ function lsSetState(state,done) {
 	}
 	done();
 }
+
+function model_getContexts(done)
+{
+	getNeighbours('contexts',function(contextsNodes) {
+		 done(contextsNodes);
+	});
+}
+function model_setContext(contextNode,done) {
+	//HERE
+	
+	model_lsContext 
+	done();
+}
+function model_addContext(node,done) {
+//	socket.emit('linkNodes',{nodeId1:'contexts',nodeId2:nodeId},done);
+
+	var contexts = lsDeserializeNode('contexts');
+	if(!contexts) {
+		contexts = {id:'contexts', label:'contexts',neighbours:[]};
+		lsSerializeNode(contexts);
+	}
+	linkNodes('contexts', node.id, function(contextsNode) {done(contextsNode);});	
+
+}
+function model_removeContext(node,done) {
+}
+
+
+

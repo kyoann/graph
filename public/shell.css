@@ -33,10 +33,12 @@ button {
 	background-color: rgb(246,246,246);
 	text-align: center;
 	margin-top:5px;
+	font-family:"Tahoma","Geneva",sans-serif;
 }
 .nodeEditorData {
 	background-color: rgb(246,246,246);
 	margin-top:5px;
 	width:100%;
 	border: 0px solid black
+	font-family:"Tahoma","Geneva",sans-serif;
 }

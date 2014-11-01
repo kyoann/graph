@@ -1,6 +1,6 @@
 function node_addNodes(container, nodesModels,uiId) {
 	var nodesViews = [];
-	for(var i = 0, length = nodesModels.length ; i < length ; i++) {
+	for(var i = 0 ; i < nodesModels.length ; i++) {
 		nodesViews.push(node_addNode(container, nodesModels[i],uiId));
 	}
 	return nodesViews;
@@ -25,6 +25,9 @@ function node_drag(ev) {
 	ev.dataTransfer.setData("Text",ev.target.id);
 }
 function node_dropOnNode(ev) {
+	node_NodeDroppedOnNodeCB(ev);
+}
+function node_NodeDroppedOnNodeCB(ev) {
 	var draggedNodeViewId = ev.dataTransfer.getData('Text');
 	var draggedNodeView = document.querySelector('#'+draggedNodeViewId);
 	var draggedNodeId = draggedNodeView.dataset.nodeid;

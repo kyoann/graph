@@ -64,8 +64,9 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	}
 
 	var makeEditorModifiable = function() {
-//		labelInput.contentEditable = 'true';
+		labelInput.contentEditable = 'true';
 //		dataInput.contentEditable = 'true';
+//		labelInput.readOnly = false;
 		dataInput.readOnly = false;
 		var saveButton = document.createElement('button'); 
 		saveButton.textContent = "Save";
@@ -108,6 +109,8 @@ function nodeEditor_append(container,uiId,nodeModel,isReadOnly) {
 	event_addModelEventListener('nodeLabelModified',nodeEditor_createNodeLabelModifiedCB(nodeEditorDiv));
 	event_addModelEventListener('nodeDataModified',nodeEditor_createNodeDataModifiedCB(nodeEditorDiv));
 }
+
+
 
 function nodeEditor_createNodeLabelModifiedCB(nodeEditorDiv) {
 	return function(modifiedNode) {
