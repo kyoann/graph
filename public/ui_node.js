@@ -28,6 +28,8 @@ function node_dropOnNode(ev) {
 	node_NodeDroppedOnNodeCB(ev);
 }
 function node_NodeDroppedOnNodeCB(ev) {
+	ev.stopPropagation();
+	ev.preventDefault();
 	var draggedNodeViewId = ev.dataTransfer.getData('Text');
 	var draggedNodeView = document.querySelector('#'+draggedNodeViewId);
 	var draggedNodeId = draggedNodeView.dataset.nodeid;
@@ -41,8 +43,6 @@ function node_NodeDroppedOnNodeCB(ev) {
 	linkNodes(draggedNodeId,droppedOnNode.dataset.nodeid, function(updatedNode) {
 		event_nodeLinked(updatedNode);	
 	});
-	ev.stopPropagation();
-	ev.preventDefault();
 }
 function node_highLightNodeDiv(nodeDiv) {
 	if(!nodeDiv) {

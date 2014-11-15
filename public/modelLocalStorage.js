@@ -5,7 +5,8 @@
 }
 */
 
-var model_lsContext = [];
+var modelLocalStorage_context = [];
+var modelLocalStorage_contextId;
 
 function lsDeserializeNode(nodeId) {
 	var nodeStr = localStorage.getItem("node"+nodeId);
@@ -35,10 +36,33 @@ function modelInit() {
 }
 modelInit();
 
+function modelLocalStorage_isInContext(node) {
+			var isInContext = true;
+			for(var j = 0 ; j < modelLocalStorage_context.length ; j++) {
+				isInContext = false;
+				for(var k = 0 ; k < node.neighbours.length ; k++) {
+					if(modelLocalStorage_context[j] == node.neighbours[k]) {
+						isInContext = true
+						break;
+					}	
+				}
+				if(!isInContext) {
+					break;
+				}
+			}
+			return isInContext
+}
+
 function getNeighbours(nodeId,done) {
 	var node = lsDeserializeNode(nodeId);
 	lsGetNodesById(node.neighbours,[],0,function(neighbours) {
-		done(neighbours);
+		var neighboursInContext = []
+		for(var i = 0 ; i < neighbours.length ; i++) {
+			if(modelLocalStorage_isInContext(neighbours[i])) {
+				neighboursInContext.push(neighbours[i]);
+			}
+		}
+		done(neighboursInContext);
 	});
 }
 
@@ -59,6 +83,11 @@ function createNode(nodeLabel,done) {
 	var node = {};
 	node.id = localStorage.lastAttributedId++ + 1;
 	node.label = nodeLabel;
+	node.neighbours = []
+	for(var i = 0 ; i < modelLocalStorage_context.length ; i++) {
+		linkNodes(modelLocalStorage_context[i], node.id)
+		node.neighbours.push(modelLocalStorage_context[i])
+	}
 	lsSerializeNode(node);
 	done(node);
 }
@@ -68,7 +97,9 @@ function linkNodes(nodeId1,nodeId2,done) {
 	node1.neighbours.push(nodeId2);
 
 	lsSerializeNode(node1);
-	done(node1);
+	if(done) {
+		done(node1);
+	}
 }
 function unlinkNode(parentNodeId, nodeId, done) {
 //	socket.emit('unlinkNode',{parentNodeId:parentNodeId,nodeId:nodeId},done);
@@ -199,30 +230,47 @@ function lsSetState(state,done) {
 	done();
 }
 
+var ls_contexts = lsDeserializeNode('contexts');
+if(!ls_contexts) {
+	ls_contexts = {id:'contexts', label:'contexts',neighbours:[]};
+	lsSerializeNode(ls_contexts);
+}
 function model_getContexts(done)
 {
 	getNeighbours('contexts',function(contextsNodes) {
-		 done(contextsNodes);
+		done(contextsNodes);
 	});
 }
-function model_setContext(contextNode,done) {
-	//HERE
+function model_setContext(contextNodeId,done) {
+	// getNeighbours(contextNodeId,function(contextsNodes) {
+		// modelLocalStorage_context = contextsNodes
 	
-	model_lsContext 
-	done();
+	//TODO manage nodelinked event
+		// done(contextsNodes);
+	// });
+	getNode(contextNodeId,function(contextNode) {
+		modelLocalStorage_context = contextNode.neighbours
+		modelLocalStorage_contextId = contextNodeId
+	//TODO manage nodelinked event
+		if(done) {
+			done(contextNode)
+		}
+	})
+}
+function model_NoContext(done) {
+	modelLocalStorage_context = []
+	modelLocalStorage_contextId = undefined
+	if(done) {
+		done()
+	}
 }
 function model_addContext(node,done) {
-//	socket.emit('linkNodes',{nodeId1:'contexts',nodeId2:nodeId},done);
-
-	var contexts = lsDeserializeNode('contexts');
-	if(!contexts) {
-		contexts = {id:'contexts', label:'contexts',neighbours:[]};
-		lsSerializeNode(contexts);
-	}
+	//	socket.emit('linkNodes',{nodeId1:'contexts',nodeId2:nodeId},done);
 	linkNodes('contexts', node.id, function(contextsNode) {done(contextsNode);});	
-
 }
 function model_removeContext(node,done) {
+	//TODO
+	unlinkNodes('contexts', node.id, function(contextsNode) {done(contextsNode);});	
 }
 
 
