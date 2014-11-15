@@ -1,0 +1,60 @@
+button {
+	border: 0px solid black;
+	border-radius: 10px;
+	color: rgb(50,50,50);
+}
+
+.UI {
+	display: inline-block;
+	vertical-align: top;
+	margin: 5px;
+	padding: 5px;
+	  font-family:"Tahoma","Geneva",sans-serif;
+	font-size:small;
+	color: #777777;
+	min-width:30px;
+	min-height:30px;
+}
+.UILabel {
+	font-family:"Tahoma","Geneva",sans-serif;
+	color: #CCCCCC;
+	text-align:left;
+	font-size:small;
+}
+.column {
+	display:inline-block;
+	vertical-align:text-top;
+}
+
+.node {
+	background-color: rgb(246,246,246);
+	display: block;
+	padding: 5px;
+	border-radius:5px;
+}
+.selectedNode {
+/*	border:1px solid black;*/
+	border-radius:5px;
+	background-color: white;
+	display: block;
+	padding: 5px;
+}
+.nodeWrapper {
+	margin-top: 15px;
+	margin-right: 5px;
+}
+[contenteditable]:focus { outline: 0px solid transparent; }
+
+.nodeEditorLabel {
+	background-color: rgb(246,246,246);
+	text-align: center;
+	margin-top:5px;
+	font-family:"Tahoma","Geneva",sans-serif;
+}
+.nodeEditorData {
+	background-color: rgb(246,246,246);
+	margin-top:5px;
+	width:100%;
+	border: 0px solid black
+	font-family:"Tahoma","Geneva",sans-serif;
+}

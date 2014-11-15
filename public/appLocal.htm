@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<link rel='stylesheet' href="appLocal.css" type='text/css'>
+<script src="modelLocalStorage.js"></script>
+<script src="ui_ui.js"></script>
+<script src="ui_event.js"></script>
+<script src="ui_node.js"></script>
+<script src="ui_nodeCreator.js"></script>
+<script src="ui_navigator.js"></script>
+<script src="ui_buffer.js"></script>
+<script src="ui_search.js"></script>
+<script src="ui_editor.js"></script>
+<script src="ui_favorites.js"></script>
+<script src="ui_context.js"></script>
+<script src="appLocal.js"></script>
+
+</head>
+<body onload='appLocal_init()' ondragover='appLocal_allowDrop(event)' ondrop='appLocal_dropNodeOnBody(event)'>
+
+<div id='connexionDivId'></div>
+<div id='errorDiv'></div>
+<div id='mainDiv' contextmenu='mymenu'></div>
+
+<menu type="context" id="mymenu">
+<menuitem label="Refresh"></menuitem>
+<menuitem label="Edit"></menuitem>
+</menu>
+
+
+<div id='favorites' class='UI' ondragover='allowdrop(event)' ondrop='dropNodeOnUI(this,event)'>
+	<div class='UILabel'> Favorites </div>
+	<div id='favoritesNodeContainer' class='UIContent' data-containerid='favorites'></div>
+</div>
+<div id='nodeEditor'  class='UI' style='display:none'>
+	<div class='UILabel'> Node editor </div>
+	<input id='nodeEditorLabel' type='text' id='nodeEditorLabel'></input>
+	<br>
+	<textarea id='nodeEditorData'></textarea>
+	<br><button onclick='saveNodeView()'>Save</button>
+	<ul id="filesLinksUL"> </ul>
+	<input id="newLink" type='text'></input>
+	<button onclick='addLinkView()'>Add link</button>
+</div>
+</body>
+</html>
